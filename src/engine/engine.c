@@ -3,8 +3,8 @@
 // Apply a force to an entity (F = ma)
 void apply_force(ZFB_Entity *entity, ZFB_Vector2 force) {
     if (entity->physics.mass == 0) return;
-    entity->physics.acceleration.x += force.x / entity.physics.mass
-    entity->physics.acceleration.y += force.y / entity.physics.mass
+    entity->physics.acceleration.x += force.x / entity.physics.mass;
+    entity->physics.acceleration.y += force.y / entity.physics.mass;
 }
 
 // Update physics (position, velocity)
@@ -23,7 +23,7 @@ void update_physics(ZFB_Entity *entity, float dt) {
 }
 
 // Check if two entities are colliding (simple box collision)
-int check_collision(ZFB_Entity *a, Entity *b) {
+int check_collision(ZFB_Entity *a, ZFB_Entity *b) {
     float a_left = a->physics.position.x;
     float a_right = a->physics.position.x + a->width;
     float a_top = a->physics.position.y;
