@@ -3,8 +3,8 @@
 // Apply a force to an entity (F = ma)
 void apply_force(ZFB_Entity *entity, ZFB_Vector2 force) {
     if (entity->physics.mass == 0) return;
-    entity->physics.acceleration.x += force.x / entity.physics.mass;
-    entity->physics.acceleration.y += force.y / entity.physics.mass;
+    entity->physics.acceleration.x += force.x / entity->physics.mass;
+    entity->physics.acceleration.y += force.y / entity->physics.mass;
 }
 
 // Update physics (position, velocity)
