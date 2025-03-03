@@ -13,5 +13,4 @@ add_subdirectory(src/renderer)
 add_library(ZFB STATIC src/zfb.c)
 
 target_link_libraries(ZFB PRIVATE engine renderer)
-
 target_include_directories(ZFB PUBLIC src/headers)
