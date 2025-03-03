@@ -37,5 +37,4 @@ typedef struct
 int ZFB_InitFB(ZFB_Device dev);
 
 
-
 #endif
