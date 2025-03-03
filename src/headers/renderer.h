@@ -2,6 +2,13 @@
 #define RENDERER_H
 
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <linux/fb.h>
+#include <sys/mman.h>
+#include <sys/ioctl.h>
 #include "../headers/engine.h"
 
 typedef struct
@@ -26,5 +33,9 @@ typedef struct
 	int w, h;
 	ZFB_Texture* texture;
 } ZFB_Rect;
+
+int ZFB_InitFB(ZFB_Device dev);
+
+
 
 #endif
