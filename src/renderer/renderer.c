@@ -1,16 +1,10 @@
 #include "../headers/renderer.h"
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <linux/fb.h>
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include "../headers/engine.h"
 
 struct fb_var_screeninfo vinfo;
 
+uint32_t rgbToHex(uint8_t r, uint8_t g, uint8_t b) {
+  return (r << 16) | (g << 8) | b;
+}
 void InitWindowsFB()
 {
   printf("Not Implemented yet\n");
@@ -47,6 +41,20 @@ void ZFB_InitFB(ZFB_Device *dev)
   {
     InitLinuxFB(dev);
   }
+}
+
+void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
+{
+  int x, y;
+  for (y = rect.y; y < rect.x+rect.h; y++)
+  {
+    for (x = rect.x; x < rect.x+rect.w; x++)
+    {
+      long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
+      *(uint32_t *)(dev.fbp + location) = rgbToHex(color.r, color.g, color.b);
+    }
+  }
+  return;
 }
 
 void ZFB_Exit(ZFB_Device *dev)
