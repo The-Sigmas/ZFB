@@ -63,10 +63,10 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
   {
     for (y = rect.y; y < rect.y + rect.h; y++) 
     {
-      if (y > vinfo.yres_virtual && y < 0) return;
+      if (y < vinfo.yres_virtual && y > 0) return;
       for (x = rect.x; x < rect.x + rect.w; x++) 
       {
-        if (x > vinfo.xres_virtual && x < 0) return;
+        if (x < vinfo.xres_virtual && x > 0) return;
         int texX = ((x - rect.x) * rect.texture->w) / rect.w;
         int texY = ((y - rect.y) * rect.texture->h) / rect.h;
 
@@ -82,10 +82,10 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
   {
     for (y = rect.y; y < rect.y + rect.h; y++) 
     {
-      if (y > vinfo.yres_virtual && y < 0) return;
+      if (y < vinfo.yres_virtual && y > 0) return;
       for (x = rect.x; x < rect.x + rect.w; x++) 
       {
-        if (x > vinfo.xres_virtual && x < 0) return;
+        if (x < vinfo.xres_virtual && x > 0) return;
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 
                       + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
 
