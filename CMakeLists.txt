@@ -10,7 +10,7 @@ include_directories(src/headers)
 add_subdirectory(src/engine)
 add_subdirectory(src/renderer)
 
-add_library(ZFB STATIC src/engine/engine.c src/renderer/renderer.c src/zfb.c)
+add_library(ZFB STATIC src/engine/engine.c src/renderer/renderer.c src/zfb.c src/engine/key_input.c)
 
 target_link_libraries(ZFB PRIVATE engine renderer)
 target_include_directories(ZFB PUBLIC src/headers)
