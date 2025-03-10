@@ -119,7 +119,6 @@ ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
     int bit_depth = png_get_bit_depth(png, info);
     int color_type = png_get_color_type(png, info);
 
-    // Convert to RGBA if necessary
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_palette_to_rgb(png);
 
@@ -136,21 +135,27 @@ ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
         png_set_strip_16(png);
 
     if (color_type == PNG_COLOR_TYPE_RGB || color_type == PNG_COLOR_TYPE_GRAY)
-        png_set_filler(png, 0xFF, PNG_FILLER_AFTER);  // Ensure 4 bytes per pixel (RGBA)
+        png_set_filler(png, 0xFF, PNG_FILLER_AFTER);
 
     png_read_update_info(png, info);
 
-    // Allocate memory for texture
     ZFB_Texture* tex = malloc(sizeof(ZFB_Texture));
     tex->w = width;
     tex->h = height;
-    tex->path = malloc(width * height * 4); // Always 4 bytes per pixel (RGBA)
+    tex->path = malloc(width * height * 4);
 
     png_bytep *row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
     for (int y = 0; y < height; y++)
         row_pointers[y] = (png_bytep)(tex->path + y * width * 4);
 
     png_read_image(png, row_pointers);
+
+    for (int i = 0; i < width * height; i++) {
+        uint8_t *pixel = (uint8_t *)(tex->path + i * 4);
+        uint8_t temp = pixel[0];  // R
+        pixel[0] = pixel[2];      // Swap R and B
+        pixel[2] = temp;          // Swap B and R
+    }
 
     // Clean up
     png_destroy_read_struct(&png, &info, NULL);
