@@ -1,4 +1,4 @@
-#if RENDERER_H
+#ifndef RENDERER_H
 #define RENDERER_H
 
 #include <string.h>
@@ -14,6 +14,9 @@
 typedef struct
 {
 	char *path;
+  int fb;
+  uint8_t *fbp;
+  size_t screensize;
 } ZFB_Device;
 
 typedef struct
@@ -34,7 +37,8 @@ typedef struct
 	ZFB_Texture* texture;
 } ZFB_Rect;
 
-int ZFB_InitFB(ZFB_Device dev);
-
+extern struct fb_var_screeninfo vinfo;
+void ZFB_InitFB(ZFB_Device *dev);
+void ZFB_Exit();
 
 #endif
