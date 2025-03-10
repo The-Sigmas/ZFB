@@ -21,7 +21,7 @@ typedef struct
 
 typedef struct
 {
-	int r,g,b;
+	uint8_t r,g,b;
 } ZFB_Color;
 
 typedef struct

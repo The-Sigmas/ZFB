@@ -62,11 +62,8 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
     for (x = rect.x; x < rect.w; x++)
     {
       long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
-      //if (vinfo.bits_per_pixel == 32) {
-      *(uint32_t *)(dev.fbp + location) = createRGB(color.r, color.g, color.b);
-      //} else if (vinfo.bits_per_pixel == 16) {
-      //  *(uint16_t *)(dev.fbp + location) = (31 << 11);
-      //}
+      char hexStr[8]; //Buffer for hex
+      *(uint32_t *)(dev.fbp + location) = sprintf(hexStr, "#%02X%02X%02X", color.r, color.g, color.b);
     }
   }
   return;
