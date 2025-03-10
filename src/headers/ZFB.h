@@ -3,5 +3,6 @@
 
 #include "renderer.h"
 #include "engine.h"
+#include "key_input.h"
 
 #endif
