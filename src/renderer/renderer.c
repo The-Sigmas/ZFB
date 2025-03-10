@@ -71,7 +71,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
   }
 }
 
-ZFB_Texture* LoadPNGTexture(const char* texturePath)
+ZFB_Texture* ZFBLoadTexture(const char* texturePath)
 {
   FILE *fp = fopen(texturePath, "rb");
   if (!fp) {
