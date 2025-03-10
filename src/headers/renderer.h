@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <png.h>
 #include <linux/fb.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
@@ -41,5 +42,6 @@ extern struct fb_var_screeninfo vinfo;
 void ZFB_InitFB(ZFB_Device *dev);
 void ZFB_Exit(ZFB_Device *dev);
 void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color);
+ZFB_Texture* ZFB_LoadTexture(const char* texturePath);
 
 #endif
