@@ -43,20 +43,19 @@ void ZFB_InitFB(ZFB_Device *dev)
   }
 }
 
-void ZFB_DrawBG(ZFB_Device dev, ZFB_Color color, ZFB_Texture tex)
+void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
+  ZFB_Rect r = { 0, 0, vinfo.xres_virtual, vinfo.yres_virtual, tex };
   if (tex != NULL)
   {
-    ZFB_Rect r = { 0, 0, vinfo.xres_virtual, vinfo.yres_virtual, tex };
-    ZFB_DrawRect(dev, rect, NULL);
+    ZFB_DrawRect(dev, r, NULL);
   } else 
   {
-    ZFB_Rect r = { 0, 0, vinfo.xres_virtual, vinfo.yres_virtual };
-    ZFB_DrawRect(dev, rect, color);
+    ZFB_DrawRect(dev, r, color);
   }
 }
 
-void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
+void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 {
   int x, y;
 
@@ -92,7 +91,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
 
         if (color != NULL)
         {
-          *(uint32_t *)(dev.fbp + location) = rgbToHex(color.r, color.g, color.b);
+          *(uint32_t *)(dev.fbp + location) = rgbToHex(color->r, color->g, color->b);
         } else
         {
           *(uint32_t *)(dev.fbp + location) = 0x000000;
