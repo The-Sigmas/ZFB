@@ -4,5 +4,6 @@
 #include "renderer.h"
 #include "engine.h"
 #include "key_input.h"
+#include "event.h"
 
 #endif

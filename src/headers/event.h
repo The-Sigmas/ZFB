@@ -1,5 +1,5 @@
-ifndef ZFB_EVENT_H
-define ZFB_EVENT_H
+#ifndef ZFB_EVENT_H
+#define ZFB_EVENT_H
 
 #include<stdint.h>
 
