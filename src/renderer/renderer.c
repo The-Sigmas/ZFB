@@ -46,9 +46,9 @@ void ZFB_InitFB(ZFB_Device *dev)
 void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
 {
   int x, y;
-  for (y = rect.y; y < rect.h; y++)
+  for (y = rect.y; y < rect.x+rect.h; y++)
   {
-    for (x = rect.x; x < rect.w; x++)
+    for (x = rect.x; x < rect.x+rect.w; x++)
     {
       long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
       *(uint32_t *)(dev.fbp + location) = rgbToHex(color.r, color.g, color.b);
