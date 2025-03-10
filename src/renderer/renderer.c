@@ -11,11 +11,9 @@
 
 struct fb_var_screeninfo vinfo;
 
-unsigned long createRGB(int r, int g, int b)
-{   
-  return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+uint32_t rgbToHex(uint8_t r, uint8_t g, uint8_t b) {
+  return (r << 16) | (g << 8) | b;
 }
-
 void InitWindowsFB()
 {
   printf("Not Implemented yet\n");
@@ -63,7 +61,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
     {
       long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
       char hexStr[8]; //Buffer for hex
-      *(uint32_t *)(dev.fbp + location) = sprintf(hexStr, "#%02X%02X%02X", color.r, color.g, color.b);
+      *(uint32_t *)(dev.fbp + location) = rgbToHex(color.r, color.g, color.b);
     }
   }
   return;
