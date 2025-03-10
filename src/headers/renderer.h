@@ -40,6 +40,6 @@ typedef struct
 extern struct fb_var_screeninfo vinfo;
 void ZFB_InitFB(ZFB_Device *dev);
 void ZFB_Exit(ZFB_Device *dev);
-void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color);
+void ZFB_DrawRect(ZFB_Device *dev, ZFB_Rect rect, ZFB_Color color);
 
 #endif
