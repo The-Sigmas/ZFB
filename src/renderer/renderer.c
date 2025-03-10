@@ -47,24 +47,33 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
 {
   int x, y;
 
-  if (rect.texture != NULL) {
-    int texX, texY;
-    for (y = rect.y; y < rect.y + rect.h; y++) {
-      for (x = rect.x; x < rect.x + rect.w; x++) {
-        texX = (x - rect.x) % rect.texture->w;
-        texY = (y - rect.y) % rect.texture->h;
+  if (rect.texture != NULL) 
+  {
+    for (y = rect.y; y < rect.y + rect.h; y++) 
+    {
+      for (x = rect.x; x < rect.x + rect.w; x++) 
+      {
+        int texX = ((x - rect.x) * rect.texture->w) / rect.w;
+        int texY = ((y - rect.y) * rect.texture->h) / rect.h;
 
         uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->w + texX) * 4);
 
-        long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
+        long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 
+                      + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
 
         *(uint32_t *)(dev.fbp + location) = texColor;
       }
     }
-  } else {
-    for (y = rect.y; y < rect.y + rect.h; y++) {
-      for (x = rect.x; x < rect.x + rect.w; x++) {
-        long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
+  } 
+  else 
+  {
+    for (y = rect.y; y < rect.y + rect.h; y++) 
+    {
+      for (x = rect.x; x < rect.x + rect.w; x++) 
+      {
+        long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 
+                      + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
+
         *(uint32_t *)(dev.fbp + location) = rgbToHex(color.r, color.g, color.b);
       }
     }
@@ -74,35 +83,40 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
 {
   FILE *fp = fopen(texturePath, "rb");
-  if (!fp) {
+  if (!fp) 
+  {
     perror("Failed to open PNG file");
     return NULL;
   }
 
   png_byte header[8];
   fread(header, 1, 8, fp);
-  if (png_sig_cmp(header, 0, 8)) {
+  if (png_sig_cmp(header, 0, 8)) 
+  {
     fprintf(stderr, "File is not a valid PNG file\n");
     fclose(fp);
     return NULL;
   }
 
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-  if (!png) {
+  if (!png) 
+  {
     fprintf(stderr, "Error creating PNG read struct\n");
     fclose(fp);
     return NULL;
   }
 
   png_infop info = png_create_info_struct(png);
-  if (!info) {
+  if (!info) 
+  {
     fprintf(stderr, "Error creating PNG info struct\n");
     png_destroy_read_struct(&png, NULL, NULL);
     fclose(fp);
     return NULL;
   }
 
-  if (setjmp(png_jmpbuf(png))) {
+  if (setjmp(png_jmpbuf(png))) 
+  {
     fprintf(stderr, "Error during PNG initialization\n");
     png_destroy_read_struct(&png, &info, NULL);
     fclose(fp);
@@ -111,31 +125,70 @@ ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
 
   png_init_io(png, fp);
   png_set_sig_bytes(png, 8);
-  png_read_png(png, info, PNG_TRANSFORM_IDENTITY, NULL);
+
+  png_read_info(png, info);
 
   int width = png_get_image_width(png, info);
   int height = png_get_image_height(png, info);
   int bit_depth = png_get_bit_depth(png, info);
   int color_type = png_get_color_type(png, info);
 
-  if (bit_depth != 8 || color_type != PNG_COLOR_TYPE_RGBA) {
-    fprintf(stderr, "Unsupported PNG format\n");
-    png_destroy_read_struct(&png, &info, NULL);
-    fclose(fp);
-    return NULL;
+  if (color_type == PNG_COLOR_TYPE_PALETTE) 
+  {
+    png_set_palette_to_rgb(png);
   }
+
+  if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) 
+  {
+    png_set_expand_gray_1_2_4_to_8(png);
+  }
+
+  if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) 
+  {
+    png_set_gray_to_rgb(png);
+  }
+
+  if (png_get_valid(png, info, PNG_INFO_tRNS)) 
+  {
+    png_set_tRNS_to_alpha(png);
+  }
+
+  if (bit_depth == 16) 
+  {
+    png_set_strip_16(png);
+  }
+
+  if (color_type == PNG_COLOR_TYPE_RGB || color_type == PNG_COLOR_TYPE_GRAY) 
+  {
+    png_set_filler(png, 0xFF, PNG_FILLER_AFTER);
+  }
+
+  png_read_update_info(png, info);
 
   ZFB_Texture* tex = malloc(sizeof(ZFB_Texture));
   tex->w = width;
   tex->h = height;
   tex->path = malloc(width * height * 4);
 
-  png_bytep *row_pointers = png_get_rows(png, info);
-  for (int y = 0; y < height; y++) {
-    memcpy(tex->path + y * width * 4, row_pointers[y], width * 4);
+  png_bytep *row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
+  for (int y = 0; y < height; y++) 
+  {
+    row_pointers[y] = (png_bytep)(tex->path + y * width * 4);
   }
 
+  png_read_image(png, row_pointers);
+
+  for (int i = 0; i < width * height; i++) 
+  {
+    uint8_t *pixel = (uint8_t *)(tex->path + i * 4);
+    uint8_t temp = pixel[0];  // R
+    pixel[0] = pixel[2];      // Swap R and B
+    pixel[2] = temp;          // Swap B and R
+  }
+
+  // Clean up
   png_destroy_read_struct(&png, &info, NULL);
+  free(row_pointers);
   fclose(fp);
 
   return tex;
