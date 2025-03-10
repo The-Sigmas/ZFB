@@ -49,6 +49,20 @@ void ZFB_InitFB(ZFB_Device *dev)
   }
 }
 
+void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
+{
+  int x, y;
+  for (y = rect.y; y < rect.h; y++)
+  {
+    for (x = rect.x; x < rect.w; x++)
+    {
+      long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
+      *(uint32_t *)(dev.fbp + location) = 0x00FF00;
+    }
+  }
+  return;
+}
+
 void ZFB_Exit(ZFB_Device *dev)
 {
   munmap(dev->fbp, dev->screensize);
