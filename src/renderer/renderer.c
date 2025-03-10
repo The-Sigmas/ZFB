@@ -78,6 +78,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color color)
       }
     }
   }
+  return;
 }
 
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
