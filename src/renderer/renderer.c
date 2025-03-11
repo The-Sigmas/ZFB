@@ -235,10 +235,8 @@ double get_memory_usage() {
 }
 
 void ZFB_DInfo() {
-  while (1) {
-    double mem_usage = get_memory_usage();
+  double mem_usage = get_memory_usage();
 
-    printf("\rMemory: %.2f%%", mem_usage);
-    fflush(stdout);
-  }
+  printf("\rMemory: %.2f%%", mem_usage);
+  fflush(stdout);
 }
