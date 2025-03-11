@@ -31,10 +31,15 @@ void ZFB_InitKeyboard() {
     newt.c_iflag &= ~(IXON | ICRNL); // Disable flow control and carriage return mapping
     newt.c_oflag &= ~(OPOST); // Disable output processing
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    printf("\e[?25l");
+    fflush(stdout);
 }
 
 void ZFB_CloseKeyboard() {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore Settings
+    printf("\e[?25h");
+    fflush(stdout);
 }
 
 int ZFB_KeyPressed() {
