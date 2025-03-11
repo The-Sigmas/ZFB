@@ -27,7 +27,7 @@ typedef struct {
 // Function declarations 
 void apply_force(ZFB_Entity *entity, ZFB_Vector2 force);
 void update_physics(ZFB_Entity *entity, float dt);
-int check_collision(ZFB_Entity *a, ZFB_Entity *b);
+int check_collision(ZFB_Entity a, ZFB_Entity b);
 
 #endif
 
