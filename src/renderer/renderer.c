@@ -222,8 +222,46 @@ void ZFB_Exit(ZFB_Device *dev)
   close(dev->fb);
 }
 
-void ZFB_DInfo()
-{
-  system("echo -ne \"\\rMemory: $(free | awk '/Mem:/ {printf \"%.2f\", $3/$2*100}')% | CPU: $(top -bn1 | grep 'Cpu(s)' | awk '{print 100 - $8}')%\"");
-  return;
+double get_memory_usage() {
+  long total, free, available;
+  FILE *fp = fopen("/proc/meminfo", "r");
+  if (!fp) return -1;
+
+  fscanf(fp, "MemTotal: %ld kB\nMemFree: %ld kB\nMemAvailable: %ld kB\n",
+       &total, &free, &available);
+  fclose(fp);
+
+  return 100.0 * (1 - (double)available / total);
+}
+
+double get_cpu_usage() {
+  static long last_idle = 0, last_total = 0;
+  long user, nice, system, idle, iowait, irq, softirq, steal;
+  long total, total_diff, idle_diff;
+    
+  FILE *fp = fopen("/proc/stat", "r");
+  if (!fp) return -1;
+
+  fscanf(fp, "cpu %ld %ld %ld %ld %ld %ld %ld %ld", 
+       &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal);
+  fclose(fp);
+
+  total = user + nice + system + idle + iowait + irq + softirq + steal;
+  total_diff = total - last_total;
+  idle_diff = idle - last_idle;
+
+  last_total = total;
+  last_idle = idle;
+
+  return 100.0 * (1.0 - (double)idle_diff / total_diff);
+}
+
+void ZFB_DInfo() {
+  while (1) {
+    double mem_usage = get_memory_usage();
+    double cpu_usage = get_cpu_usage();
+
+    printf("\rMemory: %.2f%% | CPU: %.2f%%", mem_usage, cpu_usage);
+    fflush(stdout);
+  }
 }
