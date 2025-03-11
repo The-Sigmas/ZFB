@@ -23,17 +23,16 @@ void update_physics(ZFB_Entity *entity, float dt) {
 }
 
 // Check if two entities are colliding (simple box collision)
-int check_collision(ZFB_Entity *a, ZFB_Entity *b) {
-    float a_left = a->physics.position.x;
-    float a_right = a->physics.position.x + a->width;
-    float a_top = a->physics.position.y;
-    float a_bottom = a->physics.position.y + a->height;
+int check_collision(ZFB_Entity a, ZFB_Entity b) {
+    float a_left = a.physics.position.x;
+    float a_right = a.physics.position.x + a.width;
+    float a_top = a.physics.position.y;
+    float a_bottom = a.physics.position.y + a.height;
     
-    float b_left = b->physics.position.x;
-    float b_right = b->physics.position.x + b->width;
-    float b_top = b->physics.position.y;
-    float b_bottom = b->physics.position.y + b->height;
+    float b_left = b.physics.position.x;
+    float b_right = b.physics.position.x + b.width;
+    float b_top = b.physics.position.y;
+    float b_bottom = b.physics.position.y + b.height;
     
-     return (a_right > b_left && a_left < b_right &&
-            a_bottom > b_top && a_top < b_bottom);
+    return (a_right > b_left && a_left < b_right && a_bottom > b_top && a_top < b_bottom);
 }
