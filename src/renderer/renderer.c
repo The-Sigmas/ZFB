@@ -228,15 +228,42 @@ double get_memory_usage() {
   if (!fp) return -1;
 
   fscanf(fp, "MemTotal: %ld kB\nMemFree: %ld kB\nMemAvailable: %ld kB\n",
-       &total, &free, &available);
+         &total, &free, &available);
   fclose(fp);
 
   return 100.0 * (1 - (double)available / total);
 }
 
+long get_process_memory_usage() {
+  FILE *fp = fopen("/proc/self/status", "r");
+  if (!fp) return -1;
+
+  char line[256];
+  long rss = 0;
+  while (fgets(line, sizeof(line), fp)) {
+    if (sscanf(line, "VmRSS: %ld kB", &rss) == 1) {
+      fclose(fp);
+      return rss;
+    }
+  }
+
+  fclose(fp);
+  return -1;
+}
+
 void ZFB_DInfo() {
   double mem_usage = get_memory_usage();
+  long process_mem_usage = get_process_memory_usage();
 
-  printf("\rMemory: %.2f%%", mem_usage);
+  if (mem_usage < 0 || process_mem_usage < 0) {
+    printf("Error retrieving memory usage\n");
+    return;
+  }
+
+  double total_mem_mb = process_mem_usage / 1024.0;
+  double total_system_mem = mem_usage;
+
+  printf("\rMemory: %.2f%% of total, Process: %.2fMB (%.2f%%)",
+         total_system_mem, total_mem_mb, 100.0 * process_mem_usage / (mem_usage * 1024));
   fflush(stdout);
 }
