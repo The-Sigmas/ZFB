@@ -1,5 +1,3 @@
-Got it! The engine will be implemented as a **library**, not just an API, ensuring it is structured for easy integration and learning.  
-
 ## **Elevator Pitch**
  **"Zero-Frame Buffer (ZFB) is a lightweight, fast, and fully C-based game engine library designed for low-latency rendering using memory-mapped video buffers. It features a temporal framebuffer system that updates only changed pixels, optimizing performance and memory usage. Unlike traditional game engines, ZFB is built as a standalone C library, making it easy to integrate into any project while maintaining full control over rendering. Additionally, ZFB is designed as an educational tool, helping students and beginner developers understand framebuffer graphics and game physics without unnecessary complexity."** 
 
