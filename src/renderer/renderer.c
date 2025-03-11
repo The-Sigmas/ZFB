@@ -221,3 +221,10 @@ void ZFB_Exit(ZFB_Device *dev)
   munmap(dev->fbp, dev->screensize);
   close(dev->fb);
 }
+
+void ZFB_DInfo()
+{
+  system("free | awk '/Mem:/ {printf \"Memory: %.2f%% | \", $3/$2*100}'; "
+           "top -bn1 | grep 'Cpu(s)' | awk '{print \"CPU: \" 100 - $8 \"%\"}'\r");
+  return;
+}
