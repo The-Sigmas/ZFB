@@ -222,7 +222,7 @@ void ZFB_Exit(ZFB_Device *dev)
   close(dev->fb);
 }
 
-double get_memory_usage() {
+double get_memory_usage(long *total_out) {
   long total, free, available;
   FILE *fp = fopen("/proc/meminfo", "r");
   if (!fp) return -1;
@@ -230,6 +230,8 @@ double get_memory_usage() {
   fscanf(fp, "MemTotal: %ld kB\nMemFree: %ld kB\nMemAvailable: %ld kB\n",
          &total, &free, &available);
   fclose(fp);
+
+  if (total_out) *total_out = total; // Store total memory for later use
 
   return 100.0 * (1 - (double)available / total);
 }
@@ -252,7 +254,8 @@ long get_process_memory_usage() {
 }
 
 void ZFB_DInfo() {
-  double mem_usage = get_memory_usage();
+  long total_memory;
+  double mem_usage = get_memory_usage(&total_memory);
   long process_mem_usage = get_process_memory_usage();
 
   if (mem_usage < 0 || process_mem_usage < 0) {
@@ -261,9 +264,9 @@ void ZFB_DInfo() {
   }
 
   double total_mem_mb = process_mem_usage / 1024.0;
-  double total_system_mem = mem_usage;
+  double process_mem_percentage = 100.0 * process_mem_usage / total_memory;
 
-  printf("\rMemory: %.2f%% of total, Process: %.2fMB (%.2f%%)",
-         total_system_mem, total_mem_mb, 100.0 * process_mem_usage / (mem_usage * 1024));
+  printf("\rMemory: %.2f%% of total, Process: %.2fMB (%.2f%% of system memory)",
+         mem_usage, total_mem_mb, process_mem_percentage);
   fflush(stdout);
 }

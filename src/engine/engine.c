@@ -9,9 +9,24 @@ void apply_force(ZFB_Entity *entity, ZFB_Vector2 force) {
 
 // Update physics (position, velocity)
 void update_physics(ZFB_Entity *entity, float dt) {
-    // Update velocity based on acceleration of the Entity
+    // Apply gravity if entity is affected by gravity
+    if (entity->physics.affected_by_gravity) {
+        entity->physics.acceleration.y += GRAVITY;
+    }
+
+    // Update velocity based on acceleration
     entity->physics.velocity.x += entity->physics.acceleration.x * dt;
     entity->physics.velocity.y += entity->physics.acceleration.y * dt;
+
+    // Apply damping (simulates friction/air resistance)
+    entity->physics.velocity.x *= DAMPING;
+    entity->physics.velocity.y *= DAMPING;
+
+    // Cap velocity to prevent extreme speeds
+    if (entity->physics.velocity.x > MAX_VELOCITY) entity->physics.velocity.x = MAX_VELOCITY;
+    if (entity->physics.velocity.x < -MAX_VELOCITY) entity->physics.velocity.x = -MAX_VELOCITY;
+    if (entity->physics.velocity.y > MAX_VELOCITY) entity->physics.velocity.y = MAX_VELOCITY;
+    if (entity->physics.velocity.y < -MAX_VELOCITY) entity->physics.velocity.y = -MAX_VELOCITY;
 
     // Update position based on velocity
     entity->physics.position.x += entity->physics.velocity.x * dt;
