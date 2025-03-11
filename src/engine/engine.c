@@ -11,7 +11,7 @@ void apply_force(ZFB_Entity *entity, ZFB_Vector2 force) {
 void update_physics(ZFB_Entity *entity, float dt) {
     // Update velocity based on acceleration of the Entity
     entity->physics.velocity.x += entity->physics.acceleration.x * dt;
-    entity->physics.velocity.y += entity->physics.acceleration.x * dt;
+    entity->physics.velocity.y += entity->physics.acceleration.y * dt;
 
     // Update position based on velocity
     entity->physics.position.x += entity->physics.velocity.x * dt;
