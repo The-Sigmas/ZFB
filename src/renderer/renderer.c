@@ -224,7 +224,6 @@ void ZFB_Exit(ZFB_Device *dev)
 
 void ZFB_DInfo()
 {
-  system("free | awk '/Mem:/ {printf \"Memory: %.2f%% | \", $3/$2*100}'; "
-           "top -bn1 | grep 'Cpu(s)' | awk '{print \"CPU: \" 100 - $8 \"%\"}'\r");
+  system("echo -ne \"\\rMemory: $(free | awk '/Mem:/ {printf \"%.2f\", $3/$2*100}')% | CPU: $(top -bn1 | grep 'Cpu(s)' | awk '{print 100 - $8}')%\"");
   return;
 }
