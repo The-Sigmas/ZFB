@@ -7,8 +7,8 @@
 #ifdef _WIN32
 #include <windows.h>
 
-void ZFB_InitKeyboard() {}
-void ZFB_CloseKeyboard() {}
+void ZFB_RawMode() {}
+void ZFB_Exit_RawMode() {}
 
 int ZFB_KeyPressed() {
     for (int key = 9; key < 256; key++) { // Check the keys
@@ -23,7 +23,7 @@ int ZFB_KeyPressed() {
 
 static struct termios oldt;
 
-void ZFB_InitKeyboard() {
+void ZFB_RawMode(); {
     struct termios newt;
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
@@ -36,7 +36,7 @@ void ZFB_InitKeyboard() {
     fflush(stdout);
 }
 
-void ZFB_CloseKeyboard() {
+void ZFB_Exit_RawMode() {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore Settings
     printf("\e[?25h");
     fflush(stdout);

@@ -9,8 +9,8 @@
     #include <fcntl.h>
 #endif
 
-void ZFB_InitKeyboard();
-void ZFB_CloseKeyboard();
+void ZFB_RawMode();
+void ZFB_Exit_RawMode();
 int ZFB_KeyPressed();
 
 #endif
