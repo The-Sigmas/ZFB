@@ -75,7 +75,24 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 
                       + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
 
-        *(uint32_t *)(dev.fbp + location) = texColor;
+        uint8_t *pixel = (uint8_t *)&texColor;
+        uint8_t alpha = pixel[3];
+
+        if (alpha == 255) {
+          *(uint32_t *)(dev.fbp + location) = texColor;
+        } else if (alpha > 0) {
+          uint32_t bgColor = *(uint32_t *)(dev.fbp + location);
+          uint8_t *bgPixel = (uint8_t *)&bgColor;
+
+          uint8_t outR = (pixel[0] * alpha + bgPixel[0] * (255 - alpha)) / 255;
+          uint8_t outG = (pixel[1] * alpha + bgPixel[1] * (255 - alpha)) / 255;
+          uint8_t outB = (pixel[2] * alpha + bgPixel[2] * (255 - alpha)) / 255;
+
+          *(uint32_t *)(dev.fbp + location) = (outR << 16) | (outG << 8) | outB;
+        }
+
+        // Non alpha
+        //*(uint32_t *)(dev.fbp + location) = texColor;
       }
     }
   } else
