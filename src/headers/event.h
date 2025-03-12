@@ -3,11 +3,13 @@
 
 #include<stdint.h>
 
+#define MAX_EVENT_QUEUE 256
+
 typedef enum {
     ZFB_EVENT_NONE = 0,
     ZFB_EVENT_KEYDOWN,
     ZFB_EVENT_KEYUP,
-    ZFB_EVENT_QUIT
+    ZFB_EVENT_QUIT,
 } ZFB_EventType;
 
 typedef struct {
@@ -20,8 +22,8 @@ typedef struct {
 typedef void (*ZFB_EventCallback)(const ZFB_Event* event);
 
 void ZFB_Event_Init(void);
-void ZFB_Event_Register(ZFB_EventType type, ZFB_EventCallback callback);
-void ZFB_Event_Emit(const ZFB_Event* event);
+int ZFB_PushEvent(const ZFB_Event* event);
+int ZFB_PollEvent(ZFB_Event* event);
 void ZFB_Event_Shutdown(void);
 
 #endif

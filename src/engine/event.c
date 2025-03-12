@@ -1,56 +1,46 @@
 #include "event.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-#define MAX_LISTENERS 16 
+#include <string.h>
+#include <unistd.h>
 
 typedef struct {
-    ZFB_EventType type;
-    ZFB_EventCallback callbacks[MAX_LISTENERS];
-    int callback_count;
-} ZFB_EventListener;
+    ZFB_Event events [MAX_EVENT_QUEUE];
+    int head;
+    int tail;
+    int count; 
+} ZFB_EventQueue;
 
-static ZFB_EventListener event_listeners[ZFB_EVENT_QUIT + 1];  // Keeps listener storage internal
+static ZFB_EventQueue event_queue = { .head = 0, .tail = 0, .count = 0 };
 
 void ZFB_Event_Init(void) {
-    int event_count = sizeof(event_listeners) / sizeof(event_listeners[0]);
-    for (int i = 0; i < event_count; i++) {
-        event_listeners[i].type = (ZFB_EventType)i;
-        event_listeners[i].callback_count = 0;
-    }
+    event_queue.head = 0;
+    event_queue.tail = 0;
+    event_queue.count = 0;
 }
 
-void ZFB_Event_Register(ZFB_EventType type, ZFB_EventCallback callback) {
-    int event_count = sizeof(event_listeners) / sizeof(event_listeners[0]);
-    if ((int)type >= event_count) return;  // Ensure event type is valid
-
-    ZFB_EventListener* listener = &event_listeners[type];
-
-    if (listener->callback_count < MAX_LISTENERS) {
-        listener->callbacks[listener->callback_count++] = callback;
-    } else {
-        fprintf(stderr, "Warning: Too many listeners for event %d\n", type);
+int ZFB_PollEvent(ZFB_Event* event) {
+    if (event_queue.count == 0) {
+        return 0;
     }
-}
+    *event = event_queue.events[event_queue.head];
+    event_queue.head = (event_queue.head + 1) % MAX_EVENT_QUEUE;
+    event_queue.count--;
+    return 1;
+} 
 
-void ZFB_Event_Emit(const ZFB_Event* event) {
-    int event_count = sizeof(event_listeners) / sizeof(event_listeners[0]);
-    if (!event || (int)event->type >= event_count) {
-        fprintf(stderr, "Warning: Attempted to emit an invalid event.\n");
-        return;
+int ZFB_PollEvent(const ZFB_Event* event) {
+    if (event_queue.count >= MAX_EVENT_QUEUE) {
+        fprintf(stderr, "Warning: Event queue is overflowing. Event discarded.\n");
     }
-
-    ZFB_EventListener* listener = &event_listeners[event->type];
-
-    for (int i = 0; i < listener->callback_count; i++) {
-        listener->callbacks[i](event);
-    }
+    event.queue.events[event_queue.tail] = *event;
+    event_queue.tail = (event_queue.tail + 1) % MAX_EVENT_QUEUE;
+    event_queue.count++;
+    return 1;
 }
 
 void ZFB_Event_Shutdown(void) {
-    // No dynamic memory used, but this function is here for consistency
-    int event_count = sizeof(event_listeners) / sizeof(event_listeners[0]);
-    for (int i = 0; i < event_count; i++) {
-        event_listeners[i].callback_count = 0;
-    }
+    event_queue.head = 0;
+    event_queue.tail = 0;
+    event_queue.count = 0; 
 }
