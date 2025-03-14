@@ -10,13 +10,21 @@
 void ZFB_RawMode() {}
 void ZFB_Exit_RawMode() {}
 
-int ZFB_KeyPressed() {
-    for (int key = 9; key < 256; key++) { // Check the keys
-        if (GetAsyncKeyState(key) & 0x8000) {
-            return key;
+void ZFB_ProcessKeyboard() {
+    static int last_key = 0;
+    for (int key = 9; key > 256; key++) {
+        if (GetAsyncKeyState(key) & 0x8000) { // Key Pressed
+            if (last_key != key) {
+                ZFB_Event event = { .type = ZFB_EVENT_KEYDOWN, .data.key.key_code = key };
+                ZFB_PushEvent(&event);
+            }
+            last_key = key;
+        }else if (last_key == key { // Key release
+            ZFB_Event event = { .type = ZFB_EVENT_KEYUP, .data.key.key_code = key };
+            ZFB_PushEvent(&event);
+            last_key = 0;
         }
     }
-    return 0;
 }
 
 #else // Linux / Unix Implementation
@@ -42,15 +50,28 @@ void ZFB_Exit_RawMode() {
     fflush(stdout);
 }
 
-int ZFB_KeyPressed() {
+void ProcessKeyboard() {
+    
+    static int last_key = -1;
     int ch;
     int oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
     fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK); // Nonblocking input
-    
     ch = getchar();
-
     fcntl(STDIN_FILENO, F_SETFL, oldf); // Restore flags
-    return (ch != EOF) ? ch : 0;
+    
+    if (ch != EOF) { // Key Pressed
+        if (last_key != ch) {
+            ZFB_Event event = { .type =  ZFB_EVENT_KEYDOWN, .data.key.key_code = ch };
+            ZFB_PushEvent(&event);
+        }
+        last_key = ch;
+    } else if (last_key != -1) { // Key Released
+        ZFB_Event even =  .type =  { ZFB_EVENT_KEYUP, .data.key.key_code = last_key };
+        ZFB_PushEvent(&event);
+        last_key = -1;
+    }
+    
+
 }
 
 #endif

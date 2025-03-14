@@ -11,6 +11,5 @@
 
 void ZFB_RawMode();
 void ZFB_Exit_RawMode();
-int ZFB_KeyPressed();
-
+void ZFB_ProcessKeyboard();
 #endif
