@@ -1,4 +1,5 @@
 #include "../headers/key_input.h"
+#include "../headers/event.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -31,7 +32,7 @@ void ZFB_ProcessKeyboard() {
 
 static struct termios oldt;
 
-void ZFB_RawMode(); {
+void ZFB_RawMode() {
     struct termios newt;
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
@@ -66,7 +67,7 @@ void ProcessKeyboard() {
         }
         last_key = ch;
     } else if (last_key != -1) { // Key Released
-        ZFB_Event even =  .type =  { ZFB_EVENT_KEYUP, .data.key.key_code = last_key };
+        ZFB_Event event =  { .type =  ZFB_EVENT_KEYUP, .data.key.key_code = last_key };
         ZFB_PushEvent(&event);
         last_key = -1;
     }

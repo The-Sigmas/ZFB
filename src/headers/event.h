@@ -16,7 +16,7 @@ typedef struct {
     ZFB_EventType type;
     union {
         struct { int key_code; } key;
-    };
+    } data;
 } ZFB_Event;
 
 typedef void (*ZFB_EventCallback)(const ZFB_Event* event);

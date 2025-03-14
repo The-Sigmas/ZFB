@@ -29,11 +29,11 @@ int ZFB_PollEvent(ZFB_Event* event) {
     return 1;
 } 
 
-int ZFB_PollEvent(const ZFB_Event* event) {
+int ZFB_PushEvent(const ZFB_Event* event) {
     if (event_queue.count >= MAX_EVENT_QUEUE) {
         fprintf(stderr, "Warning: Event queue is overflowing. Event discarded.\n");
     }
-    event.queue.events[event_queue.tail] = *event;
+    event_queue.events[event_queue.tail] = *event;
     event_queue.tail = (event_queue.tail + 1) % MAX_EVENT_QUEUE;
     event_queue.count++;
     return 1;
