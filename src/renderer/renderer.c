@@ -283,7 +283,13 @@ void ZFB_DInfo() {
   double total_mem_mb = process_mem_usage / 1024.0;
   double process_mem_percentage = 100.0 * process_mem_usage / total_memory;
 
-  printf("\rMemory: %.2f%% of total, Process: %.2fMB (%.2f%% of system memory)",
+  printf("\rMemory: %.2f%% by System\r\nProcess: %.2fMB (%.2f%% of system memory)",
          mem_usage, total_mem_mb, process_mem_percentage);
   fflush(stdout);
+}
+
+void ZFB_Print(const char* text)
+{
+  printf("\r%s\n", text);
+  return;
 }
