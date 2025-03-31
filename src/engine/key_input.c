@@ -16,9 +16,6 @@
 #ifdef _WIN32
 #include <windows.h>
 
-void ZFB_RawMode() {}
-void ZFB_Exit_RawMode() {}
-
 void ZFB_ProcessKeyboard() {
     static int key_states[256] = {0};
     for (int key = 9; key < 256; key++) { 

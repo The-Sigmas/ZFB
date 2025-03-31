@@ -10,9 +10,6 @@
     #include <linux/input.h> // for KEY_ESC etc.
 #endif
 
-void ZFB_RawMode();
-void ZFB_Exit_RawMode();
-
 void ZFB_InitInput();              // Detects and opens the keyboard device
 void ZFB_CloseInput();             // Closes the device
 void ZFB_ProcessKeyboard();        // Reads events and pushes ZFB_Events
