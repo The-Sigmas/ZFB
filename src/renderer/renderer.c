@@ -5,9 +5,10 @@ struct fb_var_screeninfo vinfo;
 uint32_t rgbToHex(uint8_t r, uint8_t g, uint8_t b) {
   return (r << 16) | (g << 8) | b;
 }
+
 void InitWindowsFB()
 {
-  printf("Not Implemented yet\n");
+
   return;
 }
 

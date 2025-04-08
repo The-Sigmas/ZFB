@@ -1,16 +1,21 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "../headers/engine.h"
 #include <string.h>
 #include <png.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>
-#include <fcntl.h>
-#include <linux/fb.h>
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include "../headers/engine.h"
+
+#ifdef _WIN32
+	#include <windows.h>
+#else
+	#include <unistd.h>
+	#include <fcntl.h>
+	#include <linux/fb.h>
+	#include <sys/mman.h>
+	#include <sys/ioctl.h>
+#endif
 
 typedef struct
 {
