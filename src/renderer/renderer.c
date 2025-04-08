@@ -6,13 +6,14 @@ uint32_t rgbToHex(uint8_t r, uint8_t g, uint8_t b) {
   return (r << 16) | (g << 8) | b;
 }
 
-void InitWindowsFB()
+#ifdef _WIN32
+void InitFB()
 {
 
   return;
 }
-
-void InitLinuxFB(ZFB_Device *dev)
+#else
+void InitFB(ZFB_Device *dev)
 {
   dev->fb = open(dev->path, O_RDWR);
   if (dev->fb == -1) {
@@ -32,18 +33,20 @@ void InitLinuxFB(ZFB_Device *dev)
   }
   return;
 }
+#endif
 
 void ZFB_InitFB(ZFB_Device *dev)
 {
   if (strcmp(dev->path, "win") == 0)
   {
-    InitWindowsFB();
+    InitFB();
   } else
   {
     InitLinuxFB(dev);
   }
 }
 
+#ifdef _WIN32
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
   ZFB_Rect r = { 0, 0, vinfo.xres_virtual, vinfo.yres_virtual, tex };
@@ -233,3 +236,5 @@ ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
 
   return tex;
 }
+#else
+#endif
