@@ -8,13 +8,22 @@
 #include <stdio.h>
 
 #ifdef _WIN32
-	#include <windows.h>
+
+#include <windows.h>
+typedef struct
+{
+	int x, y, w, h;
+	COLORREF color;
+} ZFB_WinRect;
+
 #else
-	#include <unistd.h>
-	#include <fcntl.h>
-	#include <linux/fb.h>
-	#include <sys/mman.h>
-	#include <sys/ioctl.h>
+
+#include <unistd.h>
+#include <fcntl.h>
+#include <linux/fb.h>
+#include <sys/mman.h>
+#include <sys/ioctl.h>
+
 #endif
 
 typedef struct
