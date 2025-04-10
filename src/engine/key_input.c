@@ -1,21 +1,9 @@
 #include "../headers/key_input.h"
 #include "../headers/event.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <linux/input.h>
-#include <sys/ioctl.h>
-#include <dirent.h>
-#include <errno.h>
 
-#define INPUT_PATH "/dev/input/"
-#define DEBUG 1 // Set to 1 to enable debug messages
+// holy prompt engineering
 
 #ifdef _WIN32
-#include <windows.h>
-
 void ZFB_ProcessKeyboard() {
     static int key_states[256] = {0};
     for (int key = 9; key < 256; key++) { 
@@ -168,6 +156,5 @@ int ZFB_IsKeyPressed(int key) {
     if (key < 0 || key >= KEY_MAX) return 0;
     return key_states[key];
 }
-
 
 #endif // Linux Implementation

@@ -1,5 +1,6 @@
 #include "ZFB.h"
 
+#ifndef _WIN32
 void ZFB_Exit(ZFB_Device *dev)
 {
   munmap(dev->fbp, dev->screensize);
@@ -75,3 +76,4 @@ void ZFB_Exit_RawMode()
 {
   return;
 }
+#endif
