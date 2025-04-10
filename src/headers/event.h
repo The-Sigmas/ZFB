@@ -1,7 +1,14 @@
 #ifndef ZFB_EVENT_H
 #define ZFB_EVENT_H
 
-#include<stdint.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 #define MAX_EVENT_QUEUE 256
 

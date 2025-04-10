@@ -1,5 +1,5 @@
-#ifndef RENDERERLINUX_H
-#define RENDERERLINUX_H
+#ifndef RENDERERWIN_H
+#define RENDERERWIN_H
 
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
