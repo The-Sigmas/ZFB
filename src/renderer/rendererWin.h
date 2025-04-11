@@ -1,7 +1,7 @@
 #ifndef RENDERERWIN_H
 #define RENDERERWIN_H
 
-void ZFB_InitFB(ZFB_Device* dev)
+void InitFB(ZFB_Device *dev)
 {
   HWND hwnd = GetConsoleWindow();
   HDC hdc = GetDC(hwnd);

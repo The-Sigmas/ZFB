@@ -16,13 +16,6 @@ uint32_t rgbToBgr(uint32_t color)
   return 0x00 | (b[3] << 8) | (b[2] << 16) | (b[1] << 24);
 }
 
-COLORREF colorcompat(ZFB_Color color)
-{
-  COLORREF winColor;
-  
-  return
-}
-
 #ifdef _WIN32
 
 #include "rendererWin.h"
