@@ -8,16 +8,10 @@
 #include <stdio.h>
 
 #ifdef _WIN32
-
 #include <windows.h>
-typedef struct
-{
-	int id;
-	int x, y,
-			w, h;
-	COLORREF color;
-} ZFB_WinRect;
+
 #else
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <linux/fb.h>
@@ -46,7 +40,6 @@ typedef struct
 
 typedef struct
 {
-	int id;
 	int x, y,
 			w, h;
 	ZFB_Texture* texture;

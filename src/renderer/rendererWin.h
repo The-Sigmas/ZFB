@@ -1,96 +1,98 @@
 #ifndef RENDERERWIN_H
 #define RENDERERWIN_H
 
-#define CLASS_NAME "ZFBWindow"
-
-static ZFB_WinRect rects[1024];
-static int rect_count = 0;
-static HWND hwnd = NULL;
-static HINSTANCE hInst = NULL;
-
-void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
+void ZFB_InitFB(ZFB_Device* dev)
 {
-  return;
+  HWND hwnd = GetConsoleWindow();
+  HDC hdc = GetDC(hwnd);
+
+  RECT rect;
+  GetClientRect(hwnd, &rect);
+  int width = rect.right;
+  int height = rect.bottom;
+
+  BITMAPINFO bmi = {0};
+  bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
+  bmi.bmiHeader.biWidth = width;
+  bmi.bmiHeader.biHeight = -height;
+  bmi.bmiHeader.biPlanes = 1;
+  bmi.bmiHeader.biBitCount = 32;
+  bmi.bmiHeader.biCompression = BI_RGB;
+
+  HBITMAP bmp = CreateDIBSection(hdc, &bmi, DIB_RGB_COLORS, (void**)&dev->fbp, NULL, 0);
+  HDC memDC = CreateCompatibleDC(hdc);
+  SelectObject(memDC, bmp);
+
+  dev->screensize = width * height * 4;
+  dev->fb = (int)(intptr_t)memDC;
+  dev->path = (char*)(intptr_t)bmp;
 }
 
 void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 {
-  return;
-}
+  int width, height;
+  HDC memDC = (HDC)(intptr_t)dev.fb;
 
-void ZFB_PushRect(ZFB_Rect rect, ZFB_Color* color)
-{
-  rects[rect_count].id = rect.id;
-  
-  rects[rect_count].x = rect.x;
-  rects[rect_count].y = rect.y;
-  rects[rect_count].w = rect.w;
-  rects[rect_count].h = rect.h;
+  BITMAP bmp;
+  GetObject((HBITMAP)dev.path, sizeof(BITMAP), &bmp);
+  width = bmp.bmWidth;
+  height = bmp.bmHeight;
 
-  if (color != NULL)
+  for (int y = rect.y; y < rect.y + rect.h; y++)
   {
-    rects[rect_count].color = rgbToBgr(color);
-  } else
-  {
-    COLORREF bckColor = 0x00000000;
-    rects[rect_count].color = bckColor;
-  }
-  return;
-}
+    if (y < 0 || y >= height) continue;
+    for (int x = rect.x; x < rect.x + rect.w; x++)
+    {
+      if (x < 0 || x >= width) continue;
+      uint32_t* pixel = (uint32_t*)(dev.fbp + y * width * 4 + x * 4);
 
-ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
-{
-  ZFB_Texture* tex;
-  return tex;
-}
-
-void InitFB(ZFB_Device *dev, HINSTANCE hInstance, int nCmdShow)
-{
-  hInst = hInstance;
-  WNDCLASS wc = {0};
-  wc.lpfnWndProc = WindowProc;
-  wc.hInstace = hInstace;
-  wc.lpszClassName = CLASS_NAME;
-  RegisterClass(&wc);
-
-  hwnd = CreateWindowEx
-    (
-     0, CLASS_NAME, "ZFB",
-     WS_OVERLAPPEDWINDOW,
-     CW_USEDEFAULT, CW_USEDEFAULT, 640, 480,
-     NULL, NULL, hInstance, NULL
-    );
-
-  ShowWindow(hwnd, nCmdShow);
-
-  return;
-}
-
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-  switch(uMsg)
-  {
-    case WM_PAINT:
+      if (rect.texture)
       {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-        
-        for (int i = 0; i < rect_count; i++)
+        int tx = ((x - rect.x) * rect.texture->w) / rect.w;
+        int ty = ((y - rect.y) * rect.texture->h) / rect.h;
+        uint32_t texColor = *(uint32_t*)(rect.texture->path + (ty * rect.texture->w + tx) * 4);
+        uint8_t* px = (uint8_t*)&texColor;
+        uint8_t alpha = px[3];
+
+        if (alpha == 255)
         {
-          HBRUSH brush = CreateSolidBrush(rects[i].color);
-          HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, brush);
-          Rectangle
-            (hdc,
-             rects[i].x,
-             rects[i].y,
-             rects[i].x + rects[i].w,
-             rects[i].y + rects[i].h
-             );
-          SelectObject(hdc, oldBrush);
-          DeleteObject(brush);
+          *pixel = texColor;
+        } else if (alpha > 0)
+        {
+          uint8_t* dst = (uint8_t*)pixel;
+          dst[0] = (px[0] * alpha + dst[0] * (255 - alpha)) / 255;
+          dst[1] = (px[1] * alpha + dst[1] * (255 - alpha)) / 255;
+          dst[2] = (px[2] * alpha + dst[2] * (255 - alpha)) / 255;
         }
+      } else if (color)
+      {
+        *pixel = (color->r) | (color->g << 8) | (color->b << 16);
       }
+    }
   }
-  return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
+
+void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
+{
+  ZFB_Rect r = {0, 0, 0, 0, 0, tex};
+
+  BITMAP bmp;
+  GetObject((HBITMAP)dev.path, sizeof(BITMAP), &bmp);
+  r.w = bmp.bmWidth;
+  r.h = bmp.bmHeight;
+
+  ZFB_DrawRect(dev, r, color);
+}
+
+void ZFB_Present(ZFB_Device dev)
+{
+  HWND hwnd = GetConsoleWindow();
+  HDC hdc = GetDC(hwnd);
+  HDC memDC = (HDC)(intptr_t)dev.fb;
+
+  BITMAP bmp;
+  GetObject((HBITMAP)dev.path, sizeof(BITMAP), &bmp);
+  BitBlt(hdc, 0, 0, bmp.bmWidth, bmp.bmHeight, memDC, 0, 0, SRCCOPY);
+}
+
 #endif
