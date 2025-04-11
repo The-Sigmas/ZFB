@@ -12,18 +12,17 @@
 #include <windows.h>
 typedef struct
 {
-	int x, y, w, h;
+	int id;
+	int x, y,
+			w, h;
 	COLORREF color;
 } ZFB_WinRect;
-
 #else
-
 #include <unistd.h>
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-
 #endif
 
 typedef struct
@@ -47,8 +46,9 @@ typedef struct
 
 typedef struct
 {
-	int x, y;
-	int w, h;
+	int id;
+	int x, y,
+			w, h;
 	ZFB_Texture* texture;
 } ZFB_Rect;
 
