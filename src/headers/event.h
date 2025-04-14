@@ -28,9 +28,9 @@ typedef struct {
 
 typedef void (*ZFB_EventCallback)(const ZFB_Event* event);
 
-void ZFB_Event_Init(void);
+void ZFB_EventInit(void);
 int ZFB_PushEvent(const ZFB_Event* event);
 int ZFB_PollEvent(ZFB_Event* event);
-void ZFB_Event_Shutdown(void);
+void ZFB_EventShutdown(void);
 
 #endif

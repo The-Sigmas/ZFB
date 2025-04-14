@@ -25,12 +25,23 @@ typedef struct {
     int width, height;       // Size (for collision detection)
 } ZFB_Entity;
 
-#define DAMPING 0.98f
-#define GRAVITY 9.81f
-#define MAX_VELOCITY 500.0f
+typedef struct
+{
+    float DAMPING;
+    float GRAVITY;
+    float MAX_VELOCITY;
+} ZFB_WorldPhysicsProperties;
 
-void apply_force(ZFB_Entity *entity, ZFB_Vector2 force);
-void update_physics(ZFB_Entity *entity, float dt);
-int check_collision(ZFB_Entity a, ZFB_Entity b);
+extern ZFB_WorldPhysicsProperties wpp =
+{
+    .DAMPING = 0.98f,
+    .GRAVITY = 9.81f,
+    .MAX_VELOCITY = 500.0f
+}
+
+void ZFB_ApplyForce(ZFB_Entity *entity, ZFB_Vector2 force);
+void ZFB_UpdatePhysics(ZFB_Entity *entity, float dt);
+int ZFB_CheckCollision(ZFB_Entity a, ZFB_Entity b);
+void ZFB_NewWPP(ZFB_WorldPhysicsProperties nwpp);
 
 #endif

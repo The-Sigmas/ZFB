@@ -11,7 +11,7 @@ typedef struct {
 
 static ZFB_EventQueue event_queue = { .head = 0, .tail = 0, .count = 0 };
 
-void ZFB_Event_Init(void) {
+void ZFB_EventInit(void) {
     event_queue.head = 0;
     event_queue.tail = 0;
     event_queue.count = 0;
@@ -43,7 +43,7 @@ int ZFB_PushEvent(const ZFB_Event* event) {
     return 1;
 }
 
-void ZFB_Event_Shutdown(void) {
+void ZFB_EventShutdown(void) {
     event_queue.head = 0;
     event_queue.tail = 0;
     event_queue.count = 0;
