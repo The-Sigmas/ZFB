@@ -74,7 +74,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
-  ZFB_Rect r = {0, 0, 0, 0, 0, tex};
+  ZFB_Rect r = {0, 0, 0, 0, tex};
 
   BITMAP bmp;
   GetObject((HBITMAP)dev.path, sizeof(BITMAP), &bmp);

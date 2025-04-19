@@ -23,10 +23,10 @@ void ZFB_UpdatePhysics(ZFB_Entity *entity, float dt) {
     entity->physics.velocity.y *= wpp.DAMPING;
 
     // Cap velocity to prevent extreme speeds
-    if (entity->physics.velocity.x > wpp.MAX_VELOCITY) entity->physics.velocity.x = MAX_VELOCITY;
-    if (entity->physics.velocity.x < -wpp.MAX_VELOCITY) entity->physics.velocity.x = -MAX_VELOCITY;
-    if (entity->physics.velocity.y > wpp.MAX_VELOCITY) entity->physics.velocity.y = MAX_VELOCITY;
-    if (entity->physics.velocity.y < -wpp.MAX_VELOCITY) entity->physics.velocity.y = -MAX_VELOCITY;
+    if (entity->physics.velocity.x > wpp.MAX_VELOCITY) entity->physics.velocity.x = wpp.MAX_VELOCITY;
+    if (entity->physics.velocity.x < -wpp.MAX_VELOCITY) entity->physics.velocity.x = -wpp.MAX_VELOCITY;
+    if (entity->physics.velocity.y > wpp.MAX_VELOCITY) entity->physics.velocity.y = wpp.MAX_VELOCITY;
+    if (entity->physics.velocity.y < -wpp.MAX_VELOCITY) entity->physics.velocity.y = -wpp.MAX_VELOCITY;
 
     // Update position based on velocity
     entity->physics.position.x += entity->physics.velocity.x * dt;

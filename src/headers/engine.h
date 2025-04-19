@@ -37,7 +37,7 @@ extern ZFB_WorldPhysicsProperties wpp =
     .DAMPING = 0.98f,
     .GRAVITY = 9.81f,
     .MAX_VELOCITY = 500.0f
-}
+};
 
 void ZFB_ApplyForce(ZFB_Entity *entity, ZFB_Vector2 force);
 void ZFB_UpdatePhysics(ZFB_Entity *entity, float dt);
