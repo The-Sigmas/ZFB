@@ -1,5 +1,12 @@
 #include "../headers/engine.h"
 
+ZFB_WorldPhysicsProperties wpp =
+{
+    .DAMPING = 0.98f,
+    .GRAVITY = 9.81f,
+    .MAX_VELOCITY = 500.0f
+};
+
 // Apply a force to an entity (F = ma)
 void ZFB_ApplyForce(ZFB_Entity *entity, ZFB_Vector2 force) {
     if (entity->physics.mass == 0) return;
