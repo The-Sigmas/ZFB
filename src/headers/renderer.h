@@ -19,13 +19,24 @@
 #include <sys/ioctl.h>
 #endif
 
+// ifdef _WIN32 :nerd:
+
+#ifdef _WIN32
+typedef struct
+{
+	char *path;
+	uint32_t *fb; // I suppose we don't need a fbp here
+	int width, height; // Required for initializing the FB
+} ZFB_Device;
+#else
 typedef struct
 {
 	char *path;
   int fb;
   uint8_t *fbp;
-  size_t screensize;
+  size_t screensize; // Might aswell add W/H seperately in a later update
 } ZFB_Device;
+#endif
 
 typedef struct
 {
@@ -45,11 +56,19 @@ typedef struct
 	ZFB_Texture* texture;
 } ZFB_Rect;
 
+extern ZFB_Texture** texes;
+#ifndef _WIN32
 extern struct fb_var_screeninfo vinfo;
+#endif
+
 void ZFB_InitFB(ZFB_Device *dev);
 void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color);
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex);
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath);
+void ZFB_FreeTextures();
+#ifdef _WIN32
+void ZFB_Present();
+#endif
 
 #define ZFB_Red    ((ZFB_Color){255, 0, 0})
 #define ZFB_Green  ((ZFB_Color){0, 255, 0})
