@@ -7,8 +7,7 @@
 void InitFB(ZFB_Device *dev)
 {
   // TODO: if we ever support something other than WinGDI too, add checking
-  uint32_t fb[dev->width * dev->height];
-  dev->fb = fb;
+  dev->fb = malloc(dev->width * dev->height * sizeof(uint32_t));
 
   return;
 }
@@ -37,7 +36,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 
         if (alpha == 255)
         {
-          *(uint32_t *)(dev.fb[location]) = texColor;
+          *((uint32_t)&dev.fb[location]) = texColor;
         } else if (alpha > 0)
         {
           uint32_t bgColor = *(uint32_t *)(dev.fb[location]);
@@ -88,7 +87,7 @@ void ZFB_Present(ZFB_Device dev)
       hdc, 0, 0,
       dev.width, dev.height,
       0, 0, 0, dev.height,
-      dev.fb, dev->bmi,
+      dev.fb, (BITMAPINFO*)&dev->bmi,
       DIB_RGB_COLORS
     );
   ReleaseDC(dev.hwnd, hdc);
@@ -106,9 +105,9 @@ void ZFB_CreateWindow
 {
   WNDCLASS wc =
   {
-    .lpfnWndProc = WindowProc;
-    .hInstance = hInstance;
-    .lpszClassName = "ZFB_GDI";
+    .lpfnWndProc = WindowProc,
+    .hInstance = hInstance,
+    .lpszClassName = "ZFB_Window",
   };
   RegisterClass(&wc);
 
@@ -127,12 +126,12 @@ void ZFB_CreateWindow
 
   BITMAPINFO bmi = 
   {
-    .bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    .bmiHeader.biWidth = *dev->width;
-    .bmiHeader.biHeight = *dev->height;
-    .bmiHeader.biPlanes = 1;
-    .bmiHeader.biBitCount = 32; // Scary Larry in case of no 32bit depth
-    .bmiHeader.biCompression = BI_RGB; // Because who doesn't use that?
+    .bmiHeader.biSize = sizeof(BITMAPINFOHEADER),
+    .bmiHeader.biWidth = *dev->width,
+    .bmiHeader.biHeight = *dev->height,
+    .bmiHeader.biPlanes = 1,
+    .bmiHeader.biBitCount = 32, // Scary Larry in case of no 32bit depth
+    .bmiHeader.biCompression = BI_RGB // Because who doesn't use that?
   };
   dev->bmi = bmi;
 
