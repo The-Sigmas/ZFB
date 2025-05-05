@@ -1,5 +1,8 @@
 #include "../headers/renderer.h"
 
+// Don't forget to define the externs from the header file here
+ZFB_Texture** texes;
+
 uint32_t rgbToHex(uint8_t r, uint8_t g, uint8_t b)
 {
   return (r << 16) | (g << 8) | b;
@@ -26,6 +29,8 @@ struct fb_var_screeninfo vinfo;
 #include "rendererLinux.h"
 
 #endif
+
+extern 
 
 void ZFB_FreeTextures()
 {
