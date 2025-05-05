@@ -36,9 +36,11 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
         uint8_t *pixel = (uint8_t *)&texColor;
         uint8_t alpha = pixel[3];
 
-        if (alpha == 255) {
+        if (alpha == 255)
+        {
           *(uint32_t *)(dev.fbp + location) = texColor;
-        } else if (alpha > 0) {
+        } else if (alpha > 0)
+        {
           uint32_t bgColor = *(uint32_t *)(dev.fbp + location);
           uint8_t *bgPixel = (uint8_t *)&bgColor;
 

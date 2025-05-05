@@ -19,14 +19,14 @@
 #include <sys/ioctl.h>
 #endif
 
-// ifdef _WIN32 :nerd:
-
 #ifdef _WIN32
 typedef struct
 {
 	char *path;
-	uint32_t *fb; // I suppose we don't need a fbp here
-	int width, height; // Required for initializing the FB
+	uint32_t *fb;
+	int width, height;
+	HWND hwnd; // Not sure if we should include hInstance aswell
+	BITMAPINFO bmi; // Let's make the developer pass this one in aswell considering "Freedom"
 } ZFB_Device;
 #else
 typedef struct
@@ -67,7 +67,9 @@ void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex);
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath);
 void ZFB_FreeTextures();
 #ifdef _WIN32
-void ZFB_Present();
+void ZFB_Present(ZFB_Device dev);
+void ZFB_CreateWindow(ZFB_Device *dev, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
+// In case the developer is too lazy
 #endif
 
 #define ZFB_Red    ((ZFB_Color){255, 0, 0})
