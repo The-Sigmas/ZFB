@@ -3,7 +3,12 @@
 
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
-  ZFB_Rect r = { 0, 0, vinfo.xres_virtual, vinfo.yres_virtual, tex };
+  ZFB_Rect r = 
+  { 
+    0, 0, 
+    vinfo.xres_virtual, vinfo.yres_virtual, 
+    tex 
+  };
   if (tex != NULL)
   {
     ZFB_DrawRect(dev, r, NULL);
