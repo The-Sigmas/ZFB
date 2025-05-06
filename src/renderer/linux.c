@@ -1,5 +1,7 @@
 #include "../headers/renderer.h"
 
+struct fb_var_screeninfo vinfo;
+
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
   ZFB_Rect r = 

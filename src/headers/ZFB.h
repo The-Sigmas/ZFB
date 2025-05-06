@@ -6,6 +6,7 @@
 #include "key_input.h"
 #include "event.h"
 
+// TODO: Windows compatibility where possible
 #ifndef _WIN32
 void ZFB_Exit(ZFB_Device *dev);
 void ZFB_Print(const char* text);

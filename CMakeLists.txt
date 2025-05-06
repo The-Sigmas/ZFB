@@ -15,7 +15,24 @@ endif()
 add_subdirectory(src/engine)
 add_subdirectory(src/renderer)
 
-add_library(ZFB STATIC src/engine/engine.c src/renderer/renderer.c src/zfb.c src/engine/key_input.c src/engine/event.c)
+set(ZFB_SOURCES
+  src/zfb.c
+  
+  src/engine/engine.c
+  src/engine/key_input.c
+  src/engine/event.c
+  
+  src/renderer/renderer.c
+)
+
+message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+if(WIN32)
+  list(APPEND ZFB_SOURCES src/renderer/windows.c)
+elseif(UNIX AND NOT APPLE) # CMAKE_SYSTEM_NAME STREQUAL "Linux" once we have BSD support
+  list(APPEND ZFB_SOURCES src/renderer/linux.c)
+endif()
+
+add_library(ZFB STATIC ${ZFB_SOURCES})
 
 if(WIN32)
   target_link_libraries(ZFB PRIVATE engine renderer png16)

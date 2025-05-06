@@ -1,7 +1,5 @@
 #include "../headers/renderer.h"
 
-struct fb_var_screeninfo vinfo;
-
 // We will actually just make the developer create the WinMain themselves
 // which could actually provide more control on the developers side
 

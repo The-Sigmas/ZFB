@@ -32,7 +32,7 @@ struct fb_var_screeninfo vinfo;
 #endif
 *///Keeping this legacy code in case it's ever needed again
 
-void ZFB_FreeTextures()
+void ZFB_FreeTextures() // TODO: Test if this function really works or not
 {
   int childrenCount = sizeof(texes) / sizeof(ZFB_Texture);
   for (int i = 0; i < childrenCount; i++)
@@ -43,6 +43,7 @@ void ZFB_FreeTextures()
   return;
 }
 
+// TODO: Make an own PNG and/or JPG reader to keep the "Dependency Free" title
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
 {
   FILE *fp = fopen(texturePath, "rb");
