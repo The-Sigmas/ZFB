@@ -1,6 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+// We are keeping this globally across all systems in case another system also requires a window creation
+#define WIN_TITLE "ZFB_Project"
+
 #include "../headers/engine.h"
 #include <string.h>
 #include <png.h>
@@ -24,7 +27,7 @@ typedef struct
 {
 	char *path;
 	uint32_t *fb;
-	int width, height;
+	unsigned int width, height;
 	HWND hwnd; // Not sure if we should include hInstance aswell
 	BITMAPINFO bmi; // Let's make the developer pass this one in aswell considering "Freedom"
 } ZFB_Device;
@@ -34,7 +37,8 @@ typedef struct
 	char *path;
   int fb;
   uint8_t *fbp;
-  size_t screensize; // Might aswell add W/H seperately in a later update
+	unsigned int width, height;
+  size_t screensize;
 } ZFB_Device;
 #endif
 

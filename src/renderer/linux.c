@@ -1,5 +1,6 @@
-#ifndef RENDERERLINUX_H
-#define RENDERERLINUX_H
+#include "../headers/renderer.h"
+
+struct fb_var_screeninfo vinfo;
 
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
@@ -26,6 +27,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
   {
     for (y = rect.y; y < rect.y + rect.h; y++) 
     {
+      // TODO: For performance reasons, switch to the raw vinfo.[y/x]res instead of using the virtual
       if (y >= vinfo.yres_virtual || y < 0) continue;
       for (x = rect.x; x < rect.x + rect.w; x++) 
       {
@@ -99,8 +101,10 @@ void InitFB(ZFB_Device *dev)
     return;
   }
 
-  // Not needed for now
-  // ZFB_Print("Resolution: %dx%d, Bits Per Pixel: %d\n", vinfo.xres, vinfo.yres, vinfo.bits_per_pixel);
+  //Thanks to this the user can read the screen properties
+  dev->width = vinfo.xres;
+  dev->height = vinfo.yres;
+
   dev->screensize = vinfo.yres_virtual * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
   dev->fbp = (uint8_t *)mmap(0, dev->screensize, PROT_READ | PROT_WRITE, MAP_SHARED, dev->fb, 0);
   
@@ -110,4 +114,3 @@ void InitFB(ZFB_Device *dev)
   }
   return;
 }
-#endif

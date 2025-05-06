@@ -1,5 +1,6 @@
 #include "ZFB.h"
 
+// See `headers/ZFB.h` for more information
 #ifndef _WIN32
 void ZFB_Exit(ZFB_Device *dev)
 {
