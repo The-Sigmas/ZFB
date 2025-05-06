@@ -1,5 +1,6 @@
-#ifndef RENDERERWIN_H
-#define RENDERERWIN_H
+#include "../headers/renderer.h"
+
+struct fb_var_screeninfo vinfo;
 
 // We will actually just make the developer create the WinMain themselves
 // which could actually provide more control on the developers side
@@ -36,7 +37,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 
         if (alpha == 255)
         {
-          *((uint32_t)&dev.fb[location]) = texColor;
+          ((uint32_t *)dev.fb)[location] = texColor;
         } else if (alpha > 0)
         {
           uint32_t bgColor = *(uint32_t *)(dev.fb[location]);
@@ -46,7 +47,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
           uint8_t outG = (pixel[1] * alpha + bgPixel[1] * (255 - alpha)) / 255;
           uint8_t outB = (pixel[2] * alpha + bgPixel[2] * (255 - alpha)) / 255;
 
-          *(uint32_t *)(dev.fb[location]) = (outR << 16) | (outG << 8) | outB;
+          ((uint32_t *)dev.fb)[location] = (outR << 16) | (outG << 8) | outB;
         }
       }
     }
@@ -63,10 +64,10 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 
         if (color != NULL)
         {
-          *(uint32_t *)(dev.fb[location]) = rgbToHex(color->r, color->g, color->b);
+          ((uint32_t *)dev.fb)[location] = rgbToHex(color->r, color->g, color->b);
         } else
         {
-          *(uint32_t *)(dev.fb[location]) = 0x000000;
+          ((uint32_t *)dev.fb)[location] = 0x000000;
         }
       }
     }
@@ -100,13 +101,15 @@ void ZFB_Present(ZFB_Device dev)
       hdc, 0, 0,
       dev.width, dev.height,
       0, 0, 0, dev.height,
-      dev.fb, (BITMAPINFO*)&dev->bmi,
+      dev.fb, (BITMAPINFO*)&dev.bmi,
       DIB_RGB_COLORS
     );
   ReleaseDC(dev.hwnd, hdc);
   return;
 }
 
+// Dirty little cheat to get cmake to build it
+LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void ZFB_CreateWindow
 (
   ZFB_Device *dev,
@@ -127,21 +130,21 @@ void ZFB_CreateWindow
   // Now we get to the real window creation
   HWND hwnd = CreateWindow(
       "ZFB_Window",
-      "Project",
+      "ZFB_Window",
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, CW_USEDEFAULT,
-      dev.width, dev.height,
+      dev->width, dev->height,
       0, 0,
       hInstance, 0
       );
   ShowWindow(hwnd, SW_SHOW);
   dev->hwnd = hwnd;
 
-  BITMAPINFO bmi = 
+  BITMAPINFO bmi =
   {
     .bmiHeader.biSize = sizeof(BITMAPINFOHEADER),
-    .bmiHeader.biWidth = *dev->width,
-    .bmiHeader.biHeight = *dev->height,
+    .bmiHeader.biWidth = dev->width,
+    .bmiHeader.biHeight = dev->height * (-1), // We flip the biHeight so we scan top to bottom.
     .bmiHeader.biPlanes = 1,
     .bmiHeader.biBitCount = 32, // Scary Larry in case of no 32bit depth
     .bmiHeader.biCompression = BI_RGB // Because who doesn't use that?

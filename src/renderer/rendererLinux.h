@@ -1,5 +1,4 @@
-#ifndef RENDERERLINUX_H
-#define RENDERERLINUX_H
+#include "../headers/renderer.h"
 
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
@@ -112,4 +111,3 @@ void InitFB(ZFB_Device *dev)
   }
   return;
 }
-#endif

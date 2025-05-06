@@ -19,6 +19,7 @@ uint32_t rgbToBgr(uint32_t color)
   return 0x00 | (b[3] << 8) | (b[2] << 16) | (b[1] << 24);
 }
 
+/*
 #ifdef _WIN32
 
 #include "rendererWin.h"
@@ -29,8 +30,7 @@ struct fb_var_screeninfo vinfo;
 #include "rendererLinux.h"
 
 #endif
-
-extern 
+*///Keeping this legacy code in case it's ever needed again
 
 void ZFB_FreeTextures()
 {

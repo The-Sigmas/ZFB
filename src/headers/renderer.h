@@ -1,6 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+// We are keeping this globally across all systems in case another system also requires a window creation
+#define WIN_TITLE "ZFB_Project"
+
 #include "../headers/engine.h"
 #include <string.h>
 #include <png.h>
