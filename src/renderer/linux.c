@@ -27,6 +27,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
   {
     for (y = rect.y; y < rect.y + rect.h; y++) 
     {
+      // TODO: For performance reasons, switch to the raw vinfo.[y/x]res instead of using the virtual
       if (y >= vinfo.yres_virtual || y < 0) continue;
       for (x = rect.x; x < rect.x + rect.w; x++) 
       {
