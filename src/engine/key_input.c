@@ -44,7 +44,7 @@ void ZFB_RawMode() {
     fflush(stdout);
 }
 
-void ZFB_Exit_RawMode() {
+void ZFB_ExitRawMode() {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     printf("\e[?25h");
     fflush(stdout);

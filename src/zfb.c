@@ -69,12 +69,4 @@ void ZFB_Print(const char* text)
   return;
 }
 
-void ZFB_RawMode()
-{
-  return;
-}
-void ZFB_Exit_RawMode()
-{
-  return;
-}
 #endif

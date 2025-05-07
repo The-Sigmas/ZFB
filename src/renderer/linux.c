@@ -86,7 +86,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
   return;
 }
 
-void InitFB(ZFB_Device *dev)
+void ZFB_InitFB(ZFB_Device *dev)
 {
   // TODO: Check whether it's DRM or raw FB
   // REMEMBER: DRM is not developed yet
