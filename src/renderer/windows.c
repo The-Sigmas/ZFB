@@ -3,7 +3,7 @@
 // We will actually just make the developer create the WinMain themselves
 // which could actually provide more control on the developers side
 
-void InitFB(ZFB_Device *dev)
+void ZFB_InitFB(ZFB_Device *dev)
 {
   // TODO: if we ever support something other than WinGDI too, add checking
   dev->fb = malloc(dev->width * dev->height * sizeof(uint32_t));

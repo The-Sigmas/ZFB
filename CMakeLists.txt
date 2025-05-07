@@ -7,7 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories(src/headers)
 
-if(WIN32)
+if(WIN32) # For now expects it to be installed via mingw
   include_directories("C:/msys64/mingw64/include/libpng16")
   link_directories("C:/msys64/mingw64/lib")
 endif()
@@ -17,20 +17,7 @@ add_subdirectory(src/renderer)
 
 set(ZFB_SOURCES
   src/zfb.c
-  
-  src/engine/engine.c
-  src/engine/key_input.c
-  src/engine/event.c
-  
-  src/renderer/renderer.c
 )
-
-message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
-if(WIN32)
-  list(APPEND ZFB_SOURCES src/renderer/windows.c)
-elseif(UNIX AND NOT APPLE) # CMAKE_SYSTEM_NAME STREQUAL "Linux" once we have BSD support
-  list(APPEND ZFB_SOURCES src/renderer/linux.c)
-endif()
 
 add_library(ZFB STATIC ${ZFB_SOURCES})
 

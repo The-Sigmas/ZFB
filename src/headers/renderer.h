@@ -76,6 +76,9 @@ void ZFB_CreateWindow(ZFB_Device *dev, HINSTANCE hInstance, HINSTANCE hPrevInsta
 // In case the developer is too lazy
 #endif
 
+uint32_t rgbToHex(uint8_t r, uint8_t g, uint8_t b);
+uint32_t rgbToBgr(uint32_t color);
+
 #define ZFB_Red    ((ZFB_Color){255, 0, 0})
 #define ZFB_Green  ((ZFB_Color){0, 255, 0})
 #define ZFB_Blue   ((ZFB_Color){0, 0, 255})

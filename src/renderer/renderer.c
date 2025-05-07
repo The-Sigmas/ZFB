@@ -158,7 +158,7 @@ ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
   return tex;
 }
 
-void ZFB_InitFB(ZFB_Device *dev)
+/*void ZFB_InitFB(ZFB_Device *dev)
 {
   InitFB(dev);
-}
+}*/// Not so cool
