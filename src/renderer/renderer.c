@@ -130,8 +130,8 @@ ZFB_Texture* ZFB_LoadTexture(const char* texturePath)
   png_read_update_info(png, info);
 
   ZFB_Texture* tex = malloc(sizeof(ZFB_Texture));
-  tex->w = width;
-  tex->h = height;
+  tex->width = width;
+  tex->height = height;
   tex->path = malloc(width * height * 4);
 
   png_bytep *row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);

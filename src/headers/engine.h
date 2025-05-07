@@ -2,27 +2,25 @@
 #define ENGINE_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
-// 2D Vector struct
 typedef struct {
     float x;
     float y;
 } ZFB_Vector2;
 
-// Physics properties of an entity
 typedef struct {
-    ZFB_Vector2 position;      // Where the object is
-    ZFB_Vector2 velocity;      // How fast it's moving
-    ZFB_Vector2 acceleration;  // How much force is applied
-    float mass;                // How heavy it is
-    int affected_by_gravity;
+    ZFB_Vector2 position;
+    ZFB_Vector2 velocity;
+    ZFB_Vector2 acceleration;
+    float mass;
+    bool gravity;
 } ZFB_PhysicsBody;
 
-// Represents a game entity (e.g., Player, Wall, Object)
 typedef struct {
-    int id;                 // Unique identifier
-    ZFB_PhysicsBody physics; // Physics properties
-    int width, height;       // Size (for collision detection)
+    int id;
+    ZFB_PhysicsBody physics;
+    int width, height;
 } ZFB_Entity;
 
 typedef struct
