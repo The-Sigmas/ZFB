@@ -55,7 +55,7 @@ typedef struct
 
 typedef struct
 {
-	ZFB_Vector2 position,
+	ZFB_Vector2 position;
 	int width, height;
 	ZFB_Texture* texture;
 } ZFB_Rect;
