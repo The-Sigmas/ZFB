@@ -12,6 +12,10 @@ if(WIN32) # For now expects it to be installed via mingw
   link_directories("C:/msys64/mingw64/lib")
 endif()
 
+message(STATUS "WIN32 is: ${WIN32}")
+message(STATUS "CMAKE_SYSTEM_NAME is: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "CMAKE_HOST_SYSTEM_NAME is: ${CMAKE_HOST_SYSTEM_NAME}")
+
 add_subdirectory(src/engine)
 add_subdirectory(src/renderer)
 

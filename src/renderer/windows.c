@@ -151,5 +151,3 @@ void ZFB_CreateWindow
 
   return;
 }
-
-#endif
