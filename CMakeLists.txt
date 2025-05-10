@@ -12,10 +12,6 @@ if(WIN32) # For now expects it to be installed via mingw
   link_directories("C:/msys64/mingw64/lib")
 endif()
 
-message(STATUS "WIN32 is: ${WIN32}")
-message(STATUS "CMAKE_SYSTEM_NAME is: ${CMAKE_SYSTEM_NAME}")
-message(STATUS "CMAKE_HOST_SYSTEM_NAME is: ${CMAKE_HOST_SYSTEM_NAME}")
-
 add_subdirectory(src/engine)
 add_subdirectory(src/renderer)
 
@@ -23,11 +19,13 @@ set(ZFB_SOURCES
   src/zfb.c
 )
 
-add_library(ZFB STATIC ${ZFB_SOURCES})
+add_library(ZFB STATIC
+  ${ZFB_SOURCES}
+  $<TARGET_OBJECT:engine>
+  $<TARGET_OBJECT:renderer>
+)
 
 if(WIN32)
-  target_link_libraries(ZFB PRIVATE engine renderer png16)
-else()
-  target_link_libraries(ZFB PRIVATE engine renderer)
+  target_link_libraries(ZFB PRIVATE png16)
 endif()
 target_include_directories(ZFB PUBLIC src/headers)
