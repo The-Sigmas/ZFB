@@ -6,7 +6,7 @@ void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
 {
   ZFB_Rect r = 
   { 
-    0, 0, 
+    {0, 0}, 
     vinfo.xres_virtual, vinfo.yres_virtual, 
     tex 
   };
@@ -25,17 +25,17 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 
   if (rect.texture != NULL) 
   {
-    for (y = rect.y; y < rect.y + rect.h; y++) 
+    for (y = rect.position.y; y < rect.position.y + rect.height; y++) 
     {
       // TODO: For performance reasons, switch to the raw vinfo.[y/x]res instead of using the virtual
       if (y >= vinfo.yres_virtual || y < 0) continue;
-      for (x = rect.x; x < rect.x + rect.w; x++) 
+      for (x = rect.position.x; x < rect.position.x + rect.width; x++) 
       {
         if (x >= vinfo.xres_virtual || x < 0) continue;
-        int texX = ((x - rect.x) * rect.texture->w) / rect.w;
-        int texY = ((y - rect.y) * rect.texture->h) / rect.h;
+        int texX = ((x - rect.position.x) * rect.texture->width) / rect.width;
+        int texY = ((y - rect.position.y) * rect.texture->height) / rect.height;
 
-        uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->w + texX) * 4);
+        uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->width + texX) * 4);
 
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 
                       + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
@@ -64,10 +64,10 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
     }
   } else
   {
-    for (y = rect.y; y < rect.y + rect.h; y++) 
+    for (y = rect.position.y; y < rect.position.y + rect.height; y++) 
     {
       if (y >= vinfo.yres_virtual || y < 0) continue;
-      for (x = rect.x; x < rect.x + rect.w; x++) 
+      for (x = rect.position.x; x < rect.position.x + rect.width; x++) 
       {
         if (x >= vinfo.xres_virtual || x < 0) continue;
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 

@@ -19,11 +19,13 @@ set(ZFB_SOURCES
   src/zfb.c
 )
 
-add_library(ZFB STATIC ${ZFB_SOURCES})
+add_library(ZFB STATIC
+  ${ZFB_SOURCES}
+  $<TARGET_OBJECTS:engine>
+  $<TARGET_OBJECTS:renderer>
+)
 
 if(WIN32)
-  target_link_libraries(ZFB PRIVATE engine renderer png16)
-else()
-  target_link_libraries(ZFB PRIVATE engine renderer)
+  target_link_libraries(ZFB PRIVATE png16)
 endif()
 target_include_directories(ZFB PUBLIC src/headers)

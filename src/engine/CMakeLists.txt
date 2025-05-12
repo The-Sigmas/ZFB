@@ -4,5 +4,5 @@ set(ZFB_ENGINE_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/event.c
 )
 
-add_library(engine STATIC ${ZFB_ENGINE_SOURCES})
+add_library(engine OBJECT ${ZFB_ENGINE_SOURCES})
 target_include_directories(engine PUBLIC ../headers)

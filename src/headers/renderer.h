@@ -50,13 +50,13 @@ typedef struct
 typedef struct
 {
 	char *path;
-	int w, h;
+	int width, height;
 } ZFB_Texture;
 
 typedef struct
 {
-	int x, y,
-			w, h;
+	ZFB_Vector2 position;
+	int width, height;
 	ZFB_Texture* texture;
 } ZFB_Rect;
 

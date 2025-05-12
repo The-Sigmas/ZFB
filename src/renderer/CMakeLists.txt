@@ -12,5 +12,5 @@ elseif(UNIX AND NOT APPLE)
   )
 endif()
 
-add_library(renderer STATIC ${ZFB_RENDERER_SOURCES})
+add_library(renderer OBJECT ${ZFB_RENDERER_SOURCES})
 target_include_directories(renderer PUBLIC ../headers)

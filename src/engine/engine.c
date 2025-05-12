@@ -17,7 +17,7 @@ void ZFB_ApplyForce(ZFB_Entity *entity, ZFB_Vector2 force) {
 // Update physics (position, velocity)
 void ZFB_UpdatePhysics(ZFB_Entity *entity, float dt) {
     // Apply gravity if entity is affected by gravity
-    if (entity->physics.affected_by_gravity) {
+    if (entity->physics.gravity) {
         entity->physics.acceleration.y += wpp.GRAVITY;
     }
 
