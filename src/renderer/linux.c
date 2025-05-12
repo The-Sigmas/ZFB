@@ -89,7 +89,7 @@ void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 void ZFB_InitFB(ZFB_Device *dev)
 {
   // TODO: Check whether it's DRM or raw FB
-  // REMEMBER: DRM is not developed yet
+  // NOTE: DRM is not developed yet
 
   dev->fb = open(dev->path, O_RDWR);
   if (dev->fb == -1) {

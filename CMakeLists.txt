@@ -31,7 +31,7 @@ add_library(ZFB STATIC
 
 target_link_libraries(ZFB
   PRIVATE
-  png
-  zlib
+  png_static
+  zlibstatic
 )
 target_include_directories(ZFB PUBLIC src/headers)
