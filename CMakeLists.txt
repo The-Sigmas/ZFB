@@ -21,8 +21,8 @@ set(ZFB_SOURCES
 
 add_library(ZFB STATIC
   ${ZFB_SOURCES}
-  $<TARGET_OBJECT:engine>
-  $<TARGET_OBJECT:renderer>
+  $<TARGET_OBJECTS:engine>
+  $<TARGET_OBJECTS:renderer>
 )
 
 if(WIN32)
