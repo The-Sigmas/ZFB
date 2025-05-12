@@ -9,8 +9,9 @@ include_directories(src/headers)
 
 add_subdirectory(extern/zlib)
 
+set(PNG_SHARED TRUE)
 set(PNG_STATIC TRUE)
-set(SKIP_INSTALL_ALL TRUE)
+#set(SKIP_INSTALL_ALL TRUE)
 set(ZLIB_LIBRARY zlib)
 set(ZLIB_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/zlib")
 add_subdirectory(extern/libpng)
@@ -28,5 +29,9 @@ add_library(ZFB STATIC
   $<TARGET_OBJECTS:renderer>
 )
 
-target_link_libraries(ZFB PUBLIC png zlib)
+target_link_libraries(ZFB
+  PRIVATE
+  png
+  zlib
+)
 target_include_directories(ZFB PUBLIC src/headers)
