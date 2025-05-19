@@ -35,9 +35,13 @@ add_library(ZFB STATIC
   $<TARGET_OBJECTS:renderer>
 )
 
-target_link_libraries(ZFB
-  PRIVATE
-  png_static
+target_link_libraries(png_static 
+  PRIVATE 
   zlibstatic
+)
+
+target_link_libraries(ZFB
+  PUBLIC
+  png_static
 )
 target_include_directories(ZFB PUBLIC src/headers)
