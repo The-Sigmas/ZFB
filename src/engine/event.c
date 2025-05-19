@@ -15,7 +15,7 @@ void ZFB_EventInit(void) {
     event_queue.head = 0;
     event_queue.tail = 0;
     event_queue.count = 0;
-    if (DEBUG) printf("[DEBUG] Event system initialized\n");
+    if (DEBUG) printf("[DEBUG] Event system initialized\n\r");
 }
 
 int ZFB_PollEvent(ZFB_Event* event) {
@@ -25,20 +25,20 @@ int ZFB_PollEvent(ZFB_Event* event) {
     *event = event_queue.events[event_queue.head];
     event_queue.head = (event_queue.head + 1) % MAX_EVENT_QUEUE;
     event_queue.count--;
-    if (DEBUG) printf("[DEBUG] Polled event: type=%d, keycode=%d\n", 
+    if (DEBUG) printf("[DEBUG] Polled event: type=%d, keycode=%d \n\r", 
                      event->type, event->data.key.key_code);
     return 1;
 } 
 
 int ZFB_PushEvent(const ZFB_Event* event) {
     if (event_queue.count >= MAX_EVENT_QUEUE) {
-        if (DEBUG) printf("[DEBUG] Event queue full (count=%d), discarding event\n", event_queue.count);
+        if (DEBUG) printf("[DEBUG] Event queue full (count=%d), discarding event\n\r", event_queue.count);
         return 0;  // Return failure instead of overflowing
     }
     event_queue.events[event_queue.tail] = *event;
     event_queue.tail = (event_queue.tail + 1) % MAX_EVENT_QUEUE;
     event_queue.count++;
-    if (DEBUG) printf("[DEBUG] Pushed event: type=%d, keycode=%d (queue size=%d)\n", 
+    if (DEBUG) printf("[DEBUG] Pushed event: type=%d, keycode=%d (queue size=%d)\n\r", 
                      event->type, event->data.key.key_code, event_queue.count);
     return 1;
 }
@@ -47,5 +47,5 @@ void ZFB_EventShutdown(void) {
     event_queue.head = 0;
     event_queue.tail = 0;
     event_queue.count = 0;
-    if (DEBUG) printf("[DEBUG] Event system shutdown\n");
+    if (DEBUG) printf("[DEBUG] Event system shutdown\n\r");
 }
