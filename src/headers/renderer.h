@@ -69,6 +69,8 @@ extern struct fb_var_screeninfo vinfo;
 
 void ZFB_InitFB(ZFB_Device *dev);
 void ZFB_DrawRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color);
+void ZFB_DrawUnrotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color);
+void ZFB_DrawRotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color);
 void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex);
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath);
 void ZFB_FreeTextures();
