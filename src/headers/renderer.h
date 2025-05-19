@@ -9,6 +9,7 @@
 #include <png.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -57,6 +58,7 @@ typedef struct
 {
 	ZFB_Vector2 position;
 	int width, height;
+  float rotation;
 	ZFB_Texture* texture;
 } ZFB_Rect;
 

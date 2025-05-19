@@ -42,5 +42,3 @@ target_link_libraries(ZFB
 )
 
 target_include_directories(ZFB PUBLIC src/headers)
-
-add_library(ZFB::ZFB ALIAS ZFB)

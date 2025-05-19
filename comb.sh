@@ -6,8 +6,8 @@
 LIB_DIR=build/lib
 
 ar -M <<EOM
-CREATE ${LIB_DIR}/libZFB_fat.a
-ADDLIB ${LIB_DIR}/libzfb.a
+CREATE ${LIB_DIR}/libZFB_C.a
+ADDLIB ${LIB_DIR}/libZFB.a
 ADDLIB ${LIB_DIR}/libpng.a
 ADDLIB ${LIB_DIR}/libz.a
 SAVE
