@@ -1,6 +1,5 @@
-
-#include "../headers/key_input.h"
-#include "../headers/event.h"
+#include "../../headers/key_input.h"
+#include "../../headers/event.h"
 
 /* Windows implementation */
 

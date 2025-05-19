@@ -1,5 +1,5 @@
-#include "../headers/key_input.h"
-#include "../headers/event.h"
+#include "key_input.h"
+#include "event.h"
 #include <sys/select.h>   /* select() */
 
 static struct termios oldt;

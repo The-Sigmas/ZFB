@@ -12,6 +12,7 @@ set(ZLIB_BUILD_SHARED OFF CACHE BOOL "" FORCE)
 set(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(ZLIB_BUILD_MINIZIP OFF CACHE BOOL "" FORCE)
 set(ZLIB_INSTALL OFF CACHE BOOL "" FORCE)
+set(ZLIB_LIBRARY zlibstatic)
 
 set(PNG_SHARED OFF CACHE BOOL "" FORCE)
 set(PNG_STATIC ON CACHE BOOL "" FORCE)
@@ -21,7 +22,7 @@ set(SKIP_INSTALL_ALL OFF CACHE BOOL "" FORCE)
 
 include_directories(${CMAKE_SOURCE_DIR}/extern/libpng)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/libpng)
-set(ZLIB_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/zlib")
+set(ZLIB_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/zlib" CACHE PATH "" FORCE)
 
 add_subdirectory(extern/zlib)
 add_subdirectory(extern/libpng)
