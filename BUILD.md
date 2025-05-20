@@ -23,3 +23,9 @@ cmake --build build
 ```
 #### MSVC
 Not implemented yet, might come in the future
+
+## After building
+Make sure to use comb.sh to build the final `libZFB_fat.a` file where all symbols will be combined
+```bash
+comb.sh
+```

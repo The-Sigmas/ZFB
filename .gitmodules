@@ -1,0 +1,6 @@
+[submodule "extern/zlib"]
+	path = extern/zlib
+	url = https://github.com/madler/zlib.git
+[submodule "extern/libpng"]
+	path = extern/libpng
+	url = https://github.com/pnggroup/libpng.git

@@ -7,10 +7,25 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories(src/headers)
 
-if(WIN32) # For now expects it to be installed via mingw
-  include_directories("C:/msys64/mingw64/include/libpng16")
-  link_directories("C:/msys64/mingw64/lib")
-endif()
+set(ZLIB_BUILD_STATIC ON CACHE BOOL "" FORCE)
+set(ZLIB_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(ZLIB_BUILD_MINIZIP OFF CACHE BOOL "" FORCE)
+set(ZLIB_INSTALL OFF CACHE BOOL "" FORCE)
+set(ZLIB_LIBRARY zlibstatic)
+
+set(PNG_SHARED OFF CACHE BOOL "" FORCE)
+set(PNG_STATIC ON CACHE BOOL "" FORCE)
+set(PNG_EXECUTABLES OFF CACHE BOOL "" FORCE)
+set(PNG_TESTS OFF CACHE BOOL "" FORCE)
+set(SKIP_INSTALL_ALL OFF CACHE BOOL "" FORCE)
+
+include_directories(${CMAKE_SOURCE_DIR}/extern/libpng)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/libpng)
+set(ZLIB_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/zlib" CACHE PATH "" FORCE)
+
+add_subdirectory(extern/zlib)
+add_subdirectory(extern/libpng)
 
 add_subdirectory(src/engine)
 add_subdirectory(src/renderer)
@@ -25,7 +40,10 @@ add_library(ZFB STATIC
   $<TARGET_OBJECTS:renderer>
 )
 
-if(WIN32)
-  target_link_libraries(ZFB PRIVATE png16)
-endif()
+target_link_libraries(ZFB
+  PUBLIC
+  png_static
+  zlibstatic
+)
+
 target_include_directories(ZFB PUBLIC src/headers)

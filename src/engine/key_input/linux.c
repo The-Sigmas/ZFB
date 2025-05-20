@@ -1,27 +1,6 @@
-#include "../headers/key_input.h"
-#include "../headers/event.h"
-
-// holy prompt engineering
-
-#ifdef _WIN32
-void ZFB_ProcessKeyboard() {
-    static int key_states[256] = {0};
-    for (int key = 9; key < 256; key++) { 
-        if (GetAsyncKeyState(key) & 0x8000) { // Key Pressed
-            if (!key_states[key]) { // Only push KEYDOWN if key is new
-                ZFB_Event event = { .type = ZFB_EVENT_KEYDOWN, .data.key.key_code = key };
-                ZFB_PushEvent(&event);
-            }
-            key_states[key] = 1; // Mark key as pressed
-        } else if (key_states[key]) { // Key Released
-            ZFB_Event event = { .type = ZFB_EVENT_KEYUP, .data.key.key_code = key };
-            ZFB_PushEvent(&event);
-            key_states[key] = 0; // Mark key as released
-        }
-    }
-}
-
-#else // Linux / Unix Implementation
+#include "key_input.h"
+#include "event.h"
+#include <sys/select.h>   /* select() */
 
 static struct termios oldt;
 static int key_states[KEY_MAX] = {0}; 
@@ -40,16 +19,15 @@ void ZFB_RawMode() {
     newt.c_cc[VTIME] = 0;
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
     fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
-    printf("\e[?25l");
+    printf("\e[?25l\r");
     fflush(stdout);
 }
 
 void ZFB_ExitRawMode() {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    printf("\e[?25h");
+    printf("\e[?25h\r");
     fflush(stdout);
 }
-
 
 int ZFB_Detect_ActiveKeyboard() {
     const int MAX_DEVS = 64;
@@ -63,13 +41,13 @@ int ZFB_Detect_ActiveKeyboard() {
         int fd = open(path, O_RDONLY | O_NONBLOCK);
         if (fd >= 0) {
 #if DEBUG
-            printf("Opened %s\n", path);
+            printf("Opened %s\r\n", path);
 #endif
             fds[count++] = fd;
         }
     }
 
-    printf("Press any key to detect your active keyboard...\n");
+    printf("Press any key to detect your active keyboard...\r\n");
 
     while (1) {
         fd_set readfds;
@@ -86,7 +64,7 @@ int ZFB_Detect_ActiveKeyboard() {
                 if (FD_ISSET(fds[i], &readfds)) {
                     struct input_event ev;
                     if (read(fds[i], &ev, sizeof(ev)) > 0 && ev.type == EV_KEY) {
-                        printf("Detected input on /dev/input/event%d\n", i);
+                        printf("Detected input on /dev/input/event%d\r\n", i);
                         // Close all other fds
                         for (int j = 0; j < count; ++j) {
                             if (j != i) close(fds[j]);
@@ -100,13 +78,14 @@ int ZFB_Detect_ActiveKeyboard() {
 
     return -1; // Should never hit here
 }
+
 void ZFB_InitInput() {
     keyboard_fd = ZFB_Detect_ActiveKeyboard();
     if (keyboard_fd < 0) {
-        fprintf(stderr, "[ERROR] Failed to detect keyboard input device.\n");
+        fprintf(stderr, "[ERROR] Failed to detect keyboard input device.\r\n");
         exit(1);
     } else if (DEBUG) {
-        printf("[DEBUG] Keyboard initialized on fd=%d\n", keyboard_fd);
+        printf("[DEBUG] Keyboard initialized on fd=%d\r\n", keyboard_fd);
     }
 }
 
@@ -114,7 +93,7 @@ void ZFB_CloseInput() {
     if (keyboard_fd >= 0) {
         close(keyboard_fd);
         keyboard_fd = -1;
-        if (DEBUG) printf("[DEBUG] Keyboard input closed.\n");
+        if (DEBUG) printf("[DEBUG] Keyboard input closed.\r\n");
     }
 }
 
@@ -156,5 +135,3 @@ int ZFB_IsKeyPressed(int key) {
     if (key < 0 || key >= KEY_MAX) return 0;
     return key_states[key];
 }
-
-#endif // Linux Implementation

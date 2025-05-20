@@ -41,7 +41,20 @@ void ZFB_UpdatePhysics(ZFB_Entity *entity, float dt) {
 
     // Reset acceleration (forces are applied per frame)
     entity->physics.acceleration.x = 0;
-    entity->physics.acceleration.y = 0; 
+    entity->physics.acceleration.y = 0;
+
+    entity->physics.angularVelocity += entity->physics.angularAcceleration * dt;
+    entity->physics.angularVelocity *= wpp.DAMPING;
+
+    if (entity->physics.angularVelocity > wpp.MAX_VELOCITY) entity->physics.angularVelocity = wpp.MAX_VELOCITY;
+    if (entity->physics.angularVelocity < -wpp.MAX_VELOCITY) entity->physics.angularVelocity = -wpp.MAX_VELOCITY;
+
+    entity->physics.rotation += entity->physics.angularVelocity * dt;
+
+    if (entity->physics.rotation >= (float)(M_PI * 2)) entity->physics.rotation -= (float)(M_PI * 2);
+    if (entity->physics.rotation < 0.0f) entity->physics.rotation += (float)(M_PI * 2);
+
+    entity->physics.angularAcceleration = 0.0f;
 }
 
 // Check if two entities are colliding (simple box collision)
@@ -57,6 +70,11 @@ int ZFB_CheckCollision(ZFB_Entity a, ZFB_Entity b) {
     float b_bottom = b.physics.position.y + b.height;
     
     return (a_right > b_left && a_left < b_right && a_bottom > b_top && a_top < b_bottom);
+}
+
+void ZFB_ApplyTorque(ZFB_Entity *entity, float torque) {
+    if (entity->physics.mass == 0) return;
+    entity->physics.angularAcceleration += torque / entity->physics.mass;
 }
 
 void ZFB_NewWPP(ZFB_WorldPhysicsProperties nwpp)
