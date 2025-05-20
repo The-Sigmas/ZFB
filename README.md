@@ -5,4 +5,4 @@ ZFB (Zero Framebuffer) is a physics/game engine whith a big focus on portability
 - Only the operating systems APIs and/or the standart libraries
 - Easy to use while maintaining a lot of freedom
 
-Make sure to check the (https://github.com/The-Sigmas/ZFB/wiki)[Wiki] for more information!
+Make sure to check the [Wiki](https://github.com/The-Sigmas/ZFB/wiki) for more information!
