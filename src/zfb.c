@@ -63,10 +63,18 @@ void ZFB_DInfo()
   fflush(stdout);
 }
 
+#endif
 void ZFB_Print(const char* text)
 {
   printf("\r%s\n", text);
   return;
 }
 
-#endif
+void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity* entity)
+{
+  rect->position = entity->physics.position;
+  rect->width = entity->width;
+  rect->height = entity->height;
+  rect->rotation = entity->physics.rotation;
+  return;
+}
