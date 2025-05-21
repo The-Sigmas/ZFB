@@ -7,7 +7,7 @@ void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex)
   ZFB_Rect r = 
   { 
     {0, 0}, 
-    dev.height, dev.width, 
+    vinfo.xres_virtual, vinfo.yres_virtual, 
     .texture = tex 
   };
   if (tex != NULL)
@@ -28,17 +28,17 @@ void ZFB_DrawUnrotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
     for (y = rect.position.y; y < rect.position.y + rect.height; y++) 
     {
       // TODO: For performance reasons, switch to the raw vinfo.[y/x]res instead of using the virtual
-      if (y >= dev.height || y < 0) continue;
+      if (y >= vinfo.yres_virtual || y < 0) continue;
       for (x = rect.position.x; x < rect.position.x + rect.width; x++) 
       {
-        if (x >= dev.width || x < 0) continue;
+        if (x >= vinfo.xres_virtual || x < 0) continue;
         int texX = ((x - rect.position.x) * rect.texture->width) / rect.width;
         int texY = ((y - rect.position.y) * rect.texture->height) / rect.height;
 
         uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->width + texX) * 4);
 
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 
-                      + (y + vinfo.yoffset) * dev.width * (vinfo.bits_per_pixel / 8);
+                      + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
 
         uint8_t *pixel = (uint8_t *)&texColor;
         uint8_t alpha = pixel[3];
@@ -66,12 +66,12 @@ void ZFB_DrawUnrotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
   {
     for (y = rect.position.y; y < rect.position.y + rect.height; y++) 
     {
-      if (y >= dev.height || y < 0) continue;
+      if (y >= vinfo.yres_virtual || y < 0) continue;
       for (x = rect.position.x; x < rect.position.x + rect.width; x++) 
       {
-        if (x >= dev.width || x < 0) continue;
+        if (x >= vinfo.xres_virtual || x < 0) continue;
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) 
-                      + (y + vinfo.yoffset) * dev.width * (vinfo.bits_per_pixel / 8);
+                      + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
 
         if (color != NULL)
         {
@@ -103,10 +103,10 @@ void ZFB_DrawRotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
   int maxY = cy + rect.height;
 
   for (int y = minY; y <= maxY; y++) {
-    if (y < 0 || y >= dev.height) continue;
+    if (y < 0 || y >= vinfo.yres_virtual) continue;
 
     for (int x = minX; x <= maxX; x++) {
-      if (x < 0 || x >= dev.width) continue;
+      if (x < 0 || x >= vinfo.xres_virtual) continue;
 
       float dx = x - cx;
       float dy = y - cy;
@@ -128,7 +128,7 @@ void ZFB_DrawRotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
       uint8_t alpha = pixel[3];
 
       long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8)
-                    + (y + vinfo.yoffset) * dev.width * (vinfo.bits_per_pixel / 8);
+                    + (y + vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
 
       if (alpha == 255) {
         *(uint32_t *)(dev.fbp + location) = texColor;
