@@ -174,8 +174,8 @@ void ZFB_InitFB(ZFB_Device *dev)
   }
 
   //Thanks to this the user can read the screen properties
-  dev->width = vinfo.xres;
-  dev->height = vinfo.yres;
+  dev->width = vinfo.xres_virtual;
+  dev->height = vinfo.yres_virtual;
 
   dev->screensize = vinfo.yres_virtual * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
   dev->fbp = (uint8_t *)mmap(0, dev->screensize, PROT_READ | PROT_WRITE, MAP_SHARED, dev->fb, 0);

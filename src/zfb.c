@@ -72,9 +72,12 @@ void ZFB_Print(const char* text)
 
 void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity entity)
 {
+  ZFB_Texture* savedTex = rect->texture;
+  memset(rect, 0, sizeof(*rect));
   rect->position = entity.physics.position;
   rect->width = entity.width;
   rect->height = entity.height;
   rect->rotation = entity.physics.rotation;
+  rect->texture = savedTex;
   return;
 }
