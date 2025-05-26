@@ -28,6 +28,7 @@ typedef struct
 	char *path;
 	uint32_t *fb;
 	unsigned int width, height;
+  char *title;
 	HWND hwnd; // Not sure if we should include hInstance aswell
 	BITMAPINFO bmi; // Let's make the developer pass this one in aswell considering "Freedom"
 } ZFB_Device;

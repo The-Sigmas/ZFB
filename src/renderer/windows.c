@@ -196,14 +196,14 @@ void ZFB_CreateWindow
   {
     .lpfnWndProc = WindowProc,
     .hInstance = hInstance,
-    .lpszClassName = "ZFB_Window",
+    .lpszClassName = dev->title,
   };
   RegisterClass(&wc);
 
   // Now we get to the real window creation
   HWND hwnd = CreateWindow(
-      "ZFB_Window",
-      "ZFB_Window",
+      dev->title,
+      dev->title,
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, CW_USEDEFAULT,
       dev->width, dev->height,
