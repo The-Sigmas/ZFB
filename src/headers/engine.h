@@ -43,5 +43,6 @@ int ZFB_CheckCollision(ZFB_Entity a, ZFB_Entity b);
 void ZFB_NewWPP(ZFB_WorldPhysicsProperties nwpp);
 void ZFB_ApplyTorque(ZFB_Entity *entity, float torque);
 void ZFB_ApplyForceLocal(ZFB_Entity *entity, ZFB_Vector2 lf);
+void ZFB_EntityCorners(const ZFB_Entity *e, ZFB_Vector2 out[4]);
 
 #endif
