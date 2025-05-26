@@ -84,3 +84,19 @@ void ZFB_NewWPP(ZFB_WorldPhysicsProperties nwpp)
     wpp.MAX_VELOCITY = nwpp.MAX_VELOCITY;
     return;
 }
+
+void ZFB_ApplyForceLocal(ZFB_Entity *entity, ZFB_Vector2 lf) {
+    if (fabsf(entity->physics.rotation) < ZFB_ROT_EPS) {
+        ZFB_ApplyForce(entity, lf);
+        return;
+    }
+
+    float c = cosf(entity->physics.rotation);
+    float s = sinf(entity->physics.rotation);
+
+    ZFB_Vector2 wf = {
+        .x = lf.x * c - lf.y * s,
+        .y = lf.x * s + lf.y * c
+    };
+    ZFB_ApplyForce(entity, wf);
+}
