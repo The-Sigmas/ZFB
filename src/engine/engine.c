@@ -100,3 +100,24 @@ void ZFB_ApplyForceLocal(ZFB_Entity *entity, ZFB_Vector2 lf) {
     };
     ZFB_ApplyForce(entity, wf);
 }
+
+void ZFB_EntityCorners(const ZFB_Entity *e, ZFB_Vector2 out[4]) {
+    float hx = e->width  * 0.5f;
+    float hy = e->height * 0.5f;
+
+    float c = cosf(e->physics.rotation);
+    float s = sinf(e->physics.rotation);
+
+
+#define ROT2WORLD(ix,iy)  \
+    ((ZFB_Vector2){                                         \
+        .x = e->physics.position.x + (ix)*c - (iy)*s,       \
+        .y = e->physics.position.y + (ix)*s + (iy)*c        \
+    })
+
+    out[0] = ROT2WORLD(-hx, -hy);
+    out[1] = ROT2WORLD( hx, -hy);
+    out[2] = ROT2WORLD( hx,  hy);
+    out[3] = ROT2WORLD(-hx,  hy);
+#undef ROT2WORLD
+}
