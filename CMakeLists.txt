@@ -44,6 +44,8 @@ target_link_libraries(ZFB
   PUBLIC
   png_static
   zlibstatic
+  m
 )
 
 target_include_directories(ZFB PUBLIC src/headers)
+
