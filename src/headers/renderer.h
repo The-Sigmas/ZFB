@@ -9,7 +9,6 @@
 #include <png.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 
 #ifdef _WIN32
 #include <windows.h>
