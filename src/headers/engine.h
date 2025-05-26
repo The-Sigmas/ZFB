@@ -1,10 +1,10 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#define ZFB_ROT_EPS  0.001f
 #include <stdint.h>
 #include <stdbool.h>
-
-#define M_PI 3.14159265358979323846
+#include <math.h>
 
 typedef struct {
     float x;
@@ -42,5 +42,7 @@ void ZFB_UpdatePhysics(ZFB_Entity *entity, float dt);
 int ZFB_CheckCollision(ZFB_Entity a, ZFB_Entity b);
 void ZFB_NewWPP(ZFB_WorldPhysicsProperties nwpp);
 void ZFB_ApplyTorque(ZFB_Entity *entity, float torque);
+void ZFB_ApplyForceLocal(ZFB_Entity *entity, ZFB_Vector2 lf);
+void ZFB_EntityCorners(const ZFB_Entity *e, ZFB_Vector2 out[4]);
 
 #endif
