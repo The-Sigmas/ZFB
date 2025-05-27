@@ -44,31 +44,44 @@ void ZFB_DrawRotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
       if (localX < 0 || localX >= rect.width || localY < 0 || localY >= rect.height)
         continue;
 
-      int texX = (int)(localX * rect.texture->width / rect.width);
-      int texY = (int)(localY * rect.texture->height / rect.height);
-
-      if (texX < 0 || texX >= rect.texture->width || texY < 0 || texY >= rect.texture->height)
-        continue;
-
-      uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->width + texX) * 4);
-      uint8_t *pixel = (uint8_t *)&texColor;
-      uint8_t alpha = pixel[3];
-
       uint32_t *fbPixel = dev.fb + (y * dev.width + x);
 
-      if (alpha == 255)
+      if (rect.texture != NULL)
       {
-        *fbPixel = texColor;
-      } else if (alpha > 0)
+        int texX = (int)(localX * rect.texture->width / rect.width);
+        int texY = (int)(localY * rect.texture->height / rect.height);
+
+        if (texX < 0 || texX >= rect.texture->width || texY < 0 || texY >= rect.texture->height)
+          continue;
+
+        uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->width + texX) * 4);
+        uint8_t *pixel = (uint8_t *)&texColor;
+        uint8_t alpha = pixel[3];
+
+        if (alpha == 255)
+        {
+          *fbPixel = texColor;
+        }
+        else if (alpha > 0)
+        {
+          uint32_t bgColor = *fbPixel;
+          uint8_t *bgPixel = (uint8_t *)&bgColor;
+
+          uint8_t outR = (pixel[0] * alpha + bgPixel[0] * (255 - alpha)) / 255;
+          uint8_t outG = (pixel[1] * alpha + bgPixel[1] * (255 - alpha)) / 255;
+          uint8_t outB = (pixel[2] * alpha + bgPixel[2] * (255 - alpha)) / 255;
+
+          *fbPixel = (outR) | (outG << 8) | (outB << 16);
+        }
+      }
+      else
       {
-        uint32_t bgColor = *fbPixel;
-        uint8_t *bgPixel = (uint8_t *)&bgColor;
-
-        uint8_t outR = (pixel[0] * alpha + bgPixel[0] * (255 - alpha)) / 255;
-        uint8_t outG = (pixel[1] * alpha + bgPixel[1] * (255 - alpha)) / 255;
-        uint8_t outB = (pixel[2] * alpha + bgPixel[2] * (255 - alpha)) / 255;
-
-        *fbPixel = (outR) | (outG << 8) | (outB << 16); // BGRA assumed
+        uint32_t drawColor = 0x000000;
+        if (color != NULL)
+        {
+          drawColor = rgbToHex(color->r, color->g, color->b);
+        }
+        *fbPixel = drawColor;
       }
     }
   }
@@ -78,21 +91,22 @@ void ZFB_DrawUnrotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 {
   int x, y;
 
-  if(rect.texture != NULL)
+  for (y = rect.position.y; y < rect.position.y + rect.height; y++)
   {
-    for (y = rect.position.y; y < rect.position.y + rect.height; y++)
+    if (y >= dev.height || y < 0) continue;
+    for (x = rect.position.x; x < rect.position.x + rect.width; x++)
     {
-      if (y >= dev.height || y < 0) continue;
-      for (x = rect.position.x; x < rect.position.x + rect.width; x++)
+      if (x >= dev.width || x < 0) continue;
+
+      if(rect.texture != NULL)
       {
-        if (x >= dev.width || x < 0) continue;
         int texX = ((x - rect.position.x) * rect.texture->width) / rect.width;
         int texY = ((y - rect.position.y) * rect.texture->height) / rect.height;
 
         uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->width + texX) * 4);
-        
+
         long location = x + (y * dev.width);
-        
+
         uint8_t *pixel = (uint8_t *)&texColor;
         uint8_t alpha = pixel[3];
 
@@ -109,27 +123,17 @@ void ZFB_DrawUnrotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
           uint8_t outB = (pixel[2] * alpha + bgPixel[2] * (255 - alpha)) / 255;
 
           ((uint32_t *)dev.fb)[location] = (outR << 16) | (outG << 8) | outB;
-        }
-      }
-    }
-  } else
-  {
-    for (y = rect.position.y; y < rect.position.y + rect.height; y++)
-    {
-      if (y >= dev.height || y < 0) continue;
-      for (x = rect.position.x; x < rect.position.x + rect.width; x++)
+        } 
+      } else
       {
-        if (x >=dev.width || x < 0) continue;
-        
         long location = x + (y * dev.width);
 
+        uint32_t drawColor = 0x000000;
         if (color != NULL)
         {
-          ((uint32_t *)dev.fb)[location] = rgbToHex(color->r, color->g, color->b);
-        } else
-        {
-          ((uint32_t *)dev.fb)[location] = 0x000000;
+          drawColor = rgbToHex(color->r, color->g, color->b);
         }
+        ((uint32_t *)dev.fb)[location] = drawColor;
       }
     }
   }
@@ -192,6 +196,10 @@ void ZFB_CreateWindow
   int nShowCmd
 )
 {
+  if(!dev->title)
+  {
+    dev->title = "ZFB_Window";
+  }
   WNDCLASS wc =
   {
     .lpfnWndProc = WindowProc,
