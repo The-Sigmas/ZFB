@@ -11,6 +11,20 @@ void ZFB_InitFB(ZFB_Device *dev)
   return;
 }
 
+/* 
+ * This function is used to update the window
+ * based on the updated sizes (message)
+ */
+void ZFB_UpdateFB(ZFB_Device* dev)
+{
+  dev->fb = realloc(dev->fb, dev->width * dev->height * sizeof(uint32_t));
+
+  dev->bmi.bmiHeader.biWidth = dev->width;
+  dev->bmi.bmiHeader.biHeight = dev->height * (-1);
+
+  return;
+}
+
 void ZFB_DrawRotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
 {
   float sinR = sinf(-rect.rotation);
@@ -186,7 +200,23 @@ void ZFB_Present(ZFB_Device dev)
 }
 
 // Dirty little cheat to get cmake to build it
-LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	if (msg == WM_DESTROY) PostQuitMessage(0);
+  switch(msg)
+  {
+    case WM_DESTROY:
+      {
+        PostQuitMessage(0);
+      }
+    case WM_SIZE:
+      {
+        // TODO: Send resize event
+      }
+  }
+	return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+
 void ZFB_CreateWindow
 (
   ZFB_Device *dev,
