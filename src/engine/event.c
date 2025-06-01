@@ -1,6 +1,6 @@
 #include "../headers/event.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 typedef struct {
     ZFB_Event events[MAX_EVENT_QUEUE];
