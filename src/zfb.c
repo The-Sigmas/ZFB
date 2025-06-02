@@ -79,8 +79,8 @@ void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity entity)
     .height = entity.height,
     .rotation = entity.physics.rotation,
     .texture = rect->texture
-  }; // Use to allocate correct memory sizes (entity and rect seem to be different for some reason???)
-  memset(rect, 0, sizeof(*rect));
+  };
+  memset(rect, 0, sizeof(rect));
   rect->position = tmp.position;
   rect->width = tmp.width;
   rect->height = tmp.height;
