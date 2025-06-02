@@ -5,11 +5,13 @@
 
 LIB_DIR=build/lib
 
+mv build/lib/libzs.a build/lib/libz.a >>2
+
 ar -M <<EOM
 CREATE ${LIB_DIR}/libZFB_C.a
 ADDLIB ${LIB_DIR}/libZFB.a
 ADDLIB ${LIB_DIR}/libpng.a
-ADDLIB ${LIB_DIR}/libzs.a
+ADDLIB ${LIB_DIR}/libz.a
 SAVE
 END
 EOM

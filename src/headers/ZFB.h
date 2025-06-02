@@ -7,7 +7,7 @@
 #include "event.h"
 
 // TODO: Windows compatibility where possible
-void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity* entity);
+void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity entity);
 void ZFB_Print(const char* text);
 #ifndef _WIN32
 void ZFB_Exit(ZFB_Device *dev);

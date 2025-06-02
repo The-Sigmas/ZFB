@@ -70,11 +70,21 @@ void ZFB_Print(const char* text)
   return;
 }
 
-void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity* entity)
+void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity entity)
 {
-  rect->position = entity->physics.position;
-  rect->width = entity->width;
-  rect->height = entity->height;
-  rect->rotation = entity->physics.rotation;
+  ZFB_Rect tmp =
+  {
+    .position = entity.physics.position,
+    .width = entity.width,
+    .height = entity.height,
+    .rotation = entity.physics.rotation,
+    .texture = rect->texture
+  };
+  memset(rect, 0, sizeof(rect));
+  rect->position = tmp.position;
+  rect->width = tmp.width;
+  rect->height = tmp.height;
+  rect->rotation = tmp.rotation;
+  rect->texture = tmp.texture;
   return;
 }
