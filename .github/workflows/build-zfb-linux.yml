@@ -1,0 +1,21 @@
+name: Build ZFB
+run-name: ${{ github.actor }}
+on: [push]
+
+jobs:
+  Setup-Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          cd zfb
+          git submodule update --init --recursive
+
+      - run: |
+          cd zfb
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - run: |
+          cd zfb
+          cmake --build build
