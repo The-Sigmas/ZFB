@@ -117,6 +117,24 @@ void ZFB_DrawUnrotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
         int texX = ((x - rect.position.x) * rect.texture->width) / rect.width;
         int texY = ((y - rect.position.y) * rect.texture->height) / rect.height;
 
+        if (texX < 0)
+        {
+          texX = 0;
+        }
+        if (texX >= (int)rect.texture->width)
+        {
+          texX = (int)rect.texture->width - 1;
+        }
+
+        if (texY < 0)
+        {
+          texY = 0;
+        }
+        if (texY >= (int)rect.texture->height)
+        {
+          texY = (int)rect.texture->height - 1;
+        }
+
         uint32_t texColor = *(uint32_t *)(rect.texture->path + (texY * rect.texture->width + texX) * 4);
 
         long location = x + (y * dev.width);
