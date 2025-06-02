@@ -73,7 +73,10 @@ int ZFB_CheckCollision(ZFB_Entity a, ZFB_Entity b) {
 }
 
 void ZFB_ApplyTorque(ZFB_Entity *entity, float torque) {
-    if (entity->physics.mass == 0) return;
+    if (entity->physics.mass == 0)
+    {
+      return;
+    }
     entity->physics.angularAcceleration += torque / entity->physics.mass;
 }
 
