@@ -63,10 +63,28 @@ void ZFB_DInfo()
   fflush(stdout);
 }
 
+#endif
 void ZFB_Print(const char* text)
 {
   printf("\r%s\n", text);
   return;
 }
 
-#endif
+void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity entity)
+{
+  ZFB_Rect tmp =
+  {
+    .position = entity.physics.position,
+    .width = entity.width,
+    .height = entity.height,
+    .rotation = entity.physics.rotation,
+    .texture = rect->texture
+  };
+  memset(rect, 0, sizeof(rect));
+  rect->position = tmp.position;
+  rect->width = tmp.width;
+  rect->height = tmp.height;
+  rect->rotation = tmp.rotation;
+  rect->texture = tmp.texture;
+  return;
+}
