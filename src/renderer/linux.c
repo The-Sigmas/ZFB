@@ -32,7 +32,7 @@ void ZFB_DrawUnrotatedRect(ZFB_Device dev, ZFB_Rect rect, ZFB_Color* color)
       {
         if (x >= vinfo.xres_virtual || x < 0) continue;
 
-        if(rext.texture != NULL)
+        if(rect.texture != NULL)
         {
           int texX = ((x - rect.position.x) * rect.texture->width) / rect.width;
           int texY = ((y - rect.position.y) * rect.texture->height) / rect.height;
