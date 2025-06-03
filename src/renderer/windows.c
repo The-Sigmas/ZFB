@@ -282,3 +282,12 @@ void ZFB_CreateWindow
 
   return;
 }
+
+void ZFB_WinMessage(MSG *msg)
+{
+  while (PeekMessage(msg, 0, 0, 0, PM_REMOVE))
+  {
+    TranslateMessage(msg);
+    DispatchMessage(msg);
+  }
+}
