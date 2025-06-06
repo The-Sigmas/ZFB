@@ -5,6 +5,7 @@
 #include "engine.h"
 #include "key_input.h"
 #include "event.h"
+#include "framelimiter.h"
 
 // TODO: Windows compatibility where possible
 void ZFB_SyncEntity(ZFB_Rect* rect, ZFB_Entity entity);

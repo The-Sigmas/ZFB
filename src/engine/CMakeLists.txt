@@ -1,6 +1,7 @@
 set(ZFB_ENGINE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/engine.c
     ${CMAKE_CURRENT_SOURCE_DIR}/event.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/framelimiter.c
 )
 
 if (WIN32)
