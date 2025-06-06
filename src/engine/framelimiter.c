@@ -11,7 +11,7 @@ uint32_t ZFB_PushFrameLimiter(ZFB_FrameLimiter newFrameLimit)
   return frameLimitCount;
 }
 
-void frameTick()
+void ZFB_FrameTick()
 {
   for(int frameLimit = 0; frameLimit < frameLimitCount; frameLimit++)
   {
