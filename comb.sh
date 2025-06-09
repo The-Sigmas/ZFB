@@ -5,7 +5,7 @@
 
 LIB_DIR=build/lib
 
-mv build/lib/libzs.a build/lib/libz.a >>2
+mv build/lib/libzs.a build/lib/libz.a
 
 ar -M <<EOM
 CREATE ${LIB_DIR}/libZFB_C.a

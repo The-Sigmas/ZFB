@@ -3,6 +3,7 @@
 
 #include "engine.h"
 #include "event.h"
+#include "framelimiter.h"
 #include "key_input.h"
 #include "renderer.h"
 #include "zfb_keys.h"

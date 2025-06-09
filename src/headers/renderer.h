@@ -75,25 +75,33 @@ void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex);
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath);
 void ZFB_FreeTextures();
 #ifdef _WIN32
-void ZFB_Present(ZFB_Device dev);
 void ZFB_CreateWindow(ZFB_Device *dev, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
+void ZFB_WinMessage(MSG *msg);
 // In case the developer is too lazy
+void ZFB_Present(ZFB_Device dev);
 #endif
 
 uint32_t rgbToHex(uint8_t r, uint8_t g, uint8_t b);
 uint32_t rgbToBgr(uint32_t color);
 
-#define ZFB_Red    	((ZFB_Color){255, 0, 0})
-#define ZFB_Green  	((ZFB_Color){0, 255, 0})
-#define ZFB_Blue   	((ZFB_Color){0, 0, 255})
-#define ZFB_White  	((ZFB_Color){255, 255, 255})
-#define ZFB_Black  	((ZFB_Color){0, 0, 0})
-#define ZFB_Yellow 	((ZFB_Color){255, 255, 0})
-#define ZFB_Cyan   	((ZFB_Color){0, 255, 255})
-#define ZFB_Magenta	((ZFB_Color){255, 0, 255})
-#define ZFB_Gray   	((ZFB_Color){128, 128, 128})
-#define ZFB_Orange 	((ZFB_Color){255, 165, 0})
-#define ZFB_Purple 	((ZFB_Color){128, 0, 128})
-#define ZFB_Brown  	((ZFB_Color){165, 42, 42})
+#define ZFB_Red         ((ZFB_Color){255, 0, 0})
+#define ZFB_Green       ((ZFB_Color){0, 255, 0})
+#define ZFB_Blue        ((ZFB_Color){0, 0, 255})
+#define ZFB_Yellow      ((ZFB_Color){255, 255, 0})
+#define ZFB_Orange      ((ZFB_Color){255, 165, 0})
+#define ZFB_Purple      ((ZFB_Color){128, 0, 128})
+#define ZFB_Pink        ((ZFB_Color){255, 192, 203})
+#define ZFB_Cyan        ((ZFB_Color){0, 255, 255})
+#define ZFB_Magenta     ((ZFB_Color){255, 0, 255})
+#define ZFB_Teal        ((ZFB_Color){0, 128, 128})
+#define ZFB_Indigo      ((ZFB_Color){75, 0, 130})
+#define ZFB_Lime        ((ZFB_Color){0, 255, 0})
+#define ZFB_Brown       ((ZFB_Color){165, 42, 42})
+#define ZFB_Gray        ((ZFB_Color){128, 128, 128})
+#define ZFB_DarkGray    ((ZFB_Color){64, 64, 64})
+#define ZFB_LightGray   ((ZFB_Color){192, 192, 192})
+#define ZFB_White       ((ZFB_Color){255, 255, 255})
+#define ZFB_Black       ((ZFB_Color){0, 0, 0})
+
 
 #endif
