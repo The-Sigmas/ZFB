@@ -21,8 +21,9 @@ bool ZFB_LoadFont(const char *fontDir) {
       continue;
     }
     glyphs[glyphCount++] = (ZFB_Char){c, tex};
-    if (glyphCount >= MAX_GLYPHS)
+    if (glyphCount >= MAX_GLYPHS) {
       break;
+    }
   }
   return glyphCount > 0;
 }
