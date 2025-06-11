@@ -5,8 +5,9 @@ static int glyphCount = 0;
 
 static ZFB_Texture *FindGlyph(char c) {
   for (int i = 0; i < glyphCount; i++)
-    if (glyphs[i].c == c)
+    if (glyphs[i].c == c) {
       return glyphs[i].image;
+    }
   return NULL;
 }
 
@@ -20,8 +21,9 @@ bool ZFB_LoadFont(const char *fontDir) {
       continue;
     }
     glyphs[glyphCount++] = (ZFB_Char){c, tex};
-    if (glyphCount >= MAX_GLYPHS)
+    if (glyphCount >= MAX_GLYPHS) {
       break;
+    }
   }
   return glyphCount > 0;
 }
@@ -30,8 +32,9 @@ void ZFB_DrawText(ZFB_Device dev, const char *text, int x, int y) {
   int px = x;
   for (const char *p = text; *p; p++) {
     ZFB_Texture *tex = FindGlyph(*p);
-    if (!tex)
+    if (!tex) {
       continue;
+    }
     ZFB_Rect dst = {
         .position = {px, y},
         .width = tex->width,
