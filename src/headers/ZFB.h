@@ -3,6 +3,7 @@
 
 #include "engine.h"
 #include "event.h"
+#include "font.h"
 #include "framelimiter.h"
 #include "key_input.h"
 #include "renderer.h"
