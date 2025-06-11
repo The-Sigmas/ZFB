@@ -1,5 +1,6 @@
 set(ZFB_RENDERER_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/renderer.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/font.c
 )
 
 if(WIN32)
