@@ -15,7 +15,7 @@ bool ZFB_LoadFont(const char *fontDir) {
   glyphCount = 0;
   for (char c = 32; c < 127; c++) {
     char path[256];
-    snprintf(path, sizeof(path), "%s/%c.png", fontDir, c);
+    snprintf(path, sizeof(path), "%s/%d.png", fontDir, c);
     ZFB_Texture *tex = ZFB_LoadTexture(path);
     if (!tex) {
       continue;
