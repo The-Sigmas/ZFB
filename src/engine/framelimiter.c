@@ -3,11 +3,16 @@
 uint32_t frameLimitCount = 0;
 ZFB_FrameLimiter* frameLimiters = NULL;
 
+void ZFB_InitFrameLimiter()
+{
+  frameLimiters = malloc(0);
+}
+
 uint32_t ZFB_PushFrameLimiter(ZFB_FrameLimiter newFrameLimit)
 {
   frameLimitCount++;
   frameLimiters = realloc(frameLimiters, sizeof(ZFB_FrameLimiter) * frameLimitCount);
-  frameLimiters[frameLimitCount=1] = newFrameLimit;
+  frameLimiters[frameLimitCount-1] = newFrameLimit;
   return frameLimitCount;
 }
 

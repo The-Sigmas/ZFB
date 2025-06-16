@@ -15,6 +15,7 @@ typedef struct
 extern uint32_t frameLimitCount;
 extern ZFB_FrameLimiter* frameLimiters;
 
+void ZFB_InitFrameLimiter();
 uint32_t ZFB_PushFrameLimiter(ZFB_FrameLimiter newFrameLimit);
 void ZFB_FrameTick();
 
