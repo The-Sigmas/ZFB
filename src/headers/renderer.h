@@ -5,6 +5,7 @@
 #define WIN_TITLE "ZFB_Project"
 
 #include "../headers/engine.h"
+#include "../headers/event.h"
 #include <string.h>
 #include <png.h>
 #include <stdlib.h>
@@ -62,7 +63,8 @@ typedef struct
 } ZFB_Rect;
 
 extern ZFB_Texture** texes;
-#ifndef _WIN32
+#ifdef _WIN32
+#else
 extern struct fb_var_screeninfo vinfo;
 #endif
 
@@ -75,9 +77,6 @@ void ZFB_DrawBG(ZFB_Device dev, ZFB_Color* color, ZFB_Texture* tex);
 ZFB_Texture* ZFB_LoadTexture(const char* texturePath);
 void ZFB_FreeTextures();
 #ifdef _WIN32
-void ZFB_CreateWindow(ZFB_Device *dev, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
-void ZFB_WinMessage(MSG *msg);
-// In case the developer is too lazy
 void ZFB_Present(ZFB_Device dev);
 #endif
 

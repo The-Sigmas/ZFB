@@ -1,7 +1,86 @@
 #include "headers/ZFB.h"
 
 // See `headers/ZFB.h` for more information
-#ifndef _WIN32
+#ifdef _WIN32
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	if (msg == WM_DESTROY) PostQuitMessage(0);
+  switch(msg)
+  {
+    case WM_DESTROY:
+      {
+        PostQuitMessage(0);
+      }
+    case WM_SIZE:
+      {
+        // TODO: Send resize event
+      }
+  }
+	return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+
+void ZFB_CreateWindow
+(
+  ZFB_Device *dev,
+  HINSTANCE hInstance, 
+  HINSTANCE hPrevInstance,
+  LPSTR lpCmdLine, 
+  int nShowCmd
+)
+{
+  if(!dev->title)
+  {
+    dev->title = "ZFB_Window";
+  }
+  WNDCLASS wc =
+  {
+    .lpfnWndProc = WindowProc,
+    .hInstance = hInstance,
+    .lpszClassName = dev->title,
+  };
+  RegisterClass(&wc);
+
+  // Now we get to the real window creation
+  HWND hwnd = CreateWindow(
+      dev->title,
+      dev->title,
+      WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, CW_USEDEFAULT,
+      dev->width, dev->height,
+      0, 0,
+      hInstance, 0
+      );
+  ShowWindow(hwnd, SW_SHOW);
+  dev->hwnd = hwnd;
+
+  BITMAPINFO bmi =
+  {
+    .bmiHeader.biSize = sizeof(BITMAPINFOHEADER),
+    .bmiHeader.biWidth = dev->width,
+    .bmiHeader.biHeight = dev->height * (-1), // We flip the biHeight so we scan top to bottom.
+    .bmiHeader.biPlanes = 1,
+    .bmiHeader.biBitCount = 32, // Scary Larry in case of no 32bit depth
+    .bmiHeader.biCompression = BI_RGB // Because who doesn't use that?
+  };
+  dev->bmi = bmi;
+
+  return;
+}
+
+void ZFB_WinMessage()
+{
+  while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+  {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+  }
+  if (msg.message == WM_QUIT)
+  {
+    ZFB_Event e = {ZFB_EVENT_QUIT};
+    ZFB_PushEvent(&e);
+  }
+}
+#else
 void ZFB_Exit(ZFB_Device *dev)
 {
   munmap(dev->fbp, dev->screensize);
@@ -62,7 +141,6 @@ void ZFB_DInfo()
          mem_usage, total_mem_mb, process_mem_percentage);
   fflush(stdout);
 }
-
 #endif
 void ZFB_Print(const char* text)
 {
